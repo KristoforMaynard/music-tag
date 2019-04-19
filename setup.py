@@ -57,10 +57,13 @@ def _main():
             sys.exit(4)
         sys.argv += ['--record', RECORD_FNAME]
 
+    with open("README.md", "r") as fh:
+        long_description = fh.read()
+
     setup(name='Wren-tag',
           version=version,
           description='Simple interface to edit audio file metadata',
-          long_description='',
+          long_description=long_description,
           long_description_content_type="text/markdown",
           author='Kristofor Maynard',
           author_email='kristofor.maynard@gmail.com',
