@@ -1,0 +1,3 @@
+- Better interface for artwork type (front cover, back cover, etc.)
+- Document artwork interface
+- fix removing track/disc numbers and artwork (see test/test_rm.py)

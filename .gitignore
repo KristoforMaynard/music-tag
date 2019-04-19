@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+
+build/
+dist/
+
+MANIFEST
+.install_manifest.json
+Wren-tag.egg-info/
+Wren_tag.egg-info/
+
+Wren-tag.sublime-workspace
