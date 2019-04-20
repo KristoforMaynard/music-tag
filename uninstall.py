@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+import glob
+from itertools import dropwhile
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -17,9 +20,21 @@ except NameError:
         pass
 
 
+def find_pkg_name(setup_py):
+    with open(setup_py, 'r') as fin:
+        for line in dropwhile(lambda s: not re.search(r'\s*setup\s*\(', s), fin):
+            m = re.search(r'''name\s*=\s*['"](.*)['"]''', line)
+            if m:
+                return m.groups()[0]
+    raise RuntimeError("Could not discover the name of this project from "
+                       "setup.py")
+
+
 def _main():
     verb = '-v' in sys.argv or '--verbose' in sys.argv
     verb = True
+
+    pkg_name = find_pkg_name('setup.py').lower().replace('-', '_')
 
     # read the install manifest
     try:
@@ -52,9 +67,16 @@ def _main():
         try:
             pkg_instdir = inst_manifest[sys.executable]['pkg_instdir']
 
-            if verb:
-                print("Remove tree:", pkg_instdir, file=sys.stderr)
-            shutil.rmtree(pkg_instdir, ignore_errors=False)
+            # if pkg_name not in fname.lower().replace('-', '_'):
+            #     raise OSError
+
+            ls_pkg_instdir = glob.glob(os.path.join(pkg_instdir, '*'))
+            if all(s.startswith('.') for s in ls_pkg_instdir):
+                if verb:
+                    print("Remove tree:", pkg_instdir, file=sys.stderr)
+                shutil.rmtree(pkg_instdir, ignore_errors=False)
+            else:
+                print("Package dir not empty!", pkg_instdir)
         except OSError:
             pass
 
