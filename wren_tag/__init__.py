@@ -24,7 +24,7 @@ from wren_tag import vorbis
 from wren_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
 
 
-__version__ = """0.0.3"""
+__version__ = """0.1.0"""
 
 
 logger = logging.getLogger("wren")
