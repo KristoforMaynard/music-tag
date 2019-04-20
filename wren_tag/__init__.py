@@ -4,6 +4,7 @@
 # dependancies (like qt)
 
 import logging
+import os
 
 import mutagen
 
