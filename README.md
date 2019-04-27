@@ -57,14 +57,14 @@ f = wren_tag.load_file("Wren-tag/sample/440Hz.m4a")
 title_item = f['title']
 
 # MetadataItems keep track of multi-valued keys
-title_item.values  # <- ['440Hz']
+title_item.values  # -> ['440Hz']
 
 # A single value can be extracted
-title_item.first  # <- '440Hz'
-title_item.value  # <- '440Hz'
+title_item.first  # -> '440Hz'
+title_item.value  # -> '440Hz'
 
 # MetadataItems can also be cast to a string
-str(title_item)  # <- '440Hz'
+str(title_item)  # -> '440Hz'
 ```
 
 ### Setting tags
@@ -75,10 +75,10 @@ f['title'] = '440Hz'
 
 # additional values can be appended to the tags
 f.append_tag('title', 'subtitle')
-title_item.values  # <- ['440Hz', 'subtitle']
-title_item.first  # <- '440Hz'
-title_item.value  # <- '440Hz, subtitle'
-str(title_item)  # <- '440Hz, subtitle'
+title_item.values  # -> ['440Hz', 'subtitle']
+title_item.first  # -> '440Hz'
+title_item.value  # -> '440Hz, subtitle'
+str(title_item)  # -> '440Hz, subtitle'
 ```
 
 ### Removing tags
@@ -103,11 +103,11 @@ art = f['artwork']
 #       ValueError if there is more than one image. You can also
 #       use ``art.first``, or iterate through ``art.values``.
 
-art.first.mime  # <- 'image/jpeg'
-art.first.width  # <- 1280
-art.first.height  # <- 1280
-art.first.depth  # <- 24
-art.first.data  # <- b'... raw image data ...'
+art.first.mime  # -> 'image/jpeg'
+art.first.width  # -> 1280
+art.first.height  # -> 1280
+art.first.depth  # -> 24
+art.first.data  # -> b'... raw image data ...'
 
 # set artwork
 with open('wren_tag/test/sample/imgA.jpg', 'rb') as img_in:
@@ -116,8 +116,8 @@ with open('wren_tag/test/sample/imgB.jpg', 'rb') as img_in:
     f.append_tag('artwork', img_in.read())
 
 # Make a thumbnail (requires Pillow)
-art.first.thumbnail([64, 64])  # <- pillow image
-art.first.raw_thumbnail([64, 64])  # <- b'... raw thumbnail data ...'
+art.first.thumbnail([64, 64])  # -> pillow image
+art.first.raw_thumbnail([64, 64])  # -> b'... raw thumbnail data ...'
 ```
 
 ### Saving tags

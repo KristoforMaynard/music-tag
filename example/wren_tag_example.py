@@ -36,7 +36,7 @@ print("??", art.first.height)
 assert art.first.width == 314
 assert art.first.height == 314
 assert art.first.depth == 24
-# art.first.data  # <- b'...raw image data...'
+# art.first.data  # -> b'...raw image data...'
 
 with open(os.path.join(sample_dir, 'imgA.jpg'), 'rb') as img_in:
     f['artwork'] = img_in.read()
@@ -44,8 +44,8 @@ with open(os.path.join(sample_dir, 'imgB.jpg'), 'rb') as img_in:
     f.append_tag('artwork', img_in.read())
 
 # thumbnails (requires Pillow)
-art.first.thumbnail([64, 64])  # <- pillow image
-art.first.raw_thumbnail([64, 64])  # <- b'... raw thumbnail data ...'
+art.first.thumbnail([64, 64])  # -> pillow image
+art.first.raw_thumbnail([64, 64])  # -> b'... raw thumbnail data ...'
 
 # saving edits
 # f.save()
