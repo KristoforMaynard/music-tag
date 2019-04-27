@@ -14,50 +14,50 @@ from wren_tag import util
 from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
-def get_tracknumA(afile, wren_key):
-    return util.get_easy_tracknum(afile, wren_key, _tag_name='TRK')
-def set_tracknumA(afile, wren_key, val):
-    return util.set_easy_tracknum(afile, wren_key, val, _tag_name='TRK')
-def get_totaltracksA(afile, wren_key):
-    return util.get_easy_totaltracks(afile, wren_key, _tag_name='TRK')
-def set_totaltracksA(afile, wren_key, val):
-    return util.set_easy_totaltracks(afile, wren_key, val, _tag_name='TRK')
+def get_tracknumA(afile, norm_key):
+    return util.get_easy_tracknum(afile, norm_key, _tag_name='TRK')
+def set_tracknumA(afile, norm_key, val):
+    return util.set_easy_tracknum(afile, norm_key, val, _tag_name='TRK')
+def get_totaltracksA(afile, norm_key):
+    return util.get_easy_totaltracks(afile, norm_key, _tag_name='TRK')
+def set_totaltracksA(afile, norm_key, val):
+    return util.set_easy_totaltracks(afile, norm_key, val, _tag_name='TRK')
 
-def get_discnumA(afile, wren_key):
-    return util.get_easy_discnum(afile, wren_key, _tag_name='TPA')
-def set_discnumA(afile, wren_key, val):
-    return util.set_easy_discnum(afile, wren_key, val, _tag_name='TPA')
-def get_totaldiscsA(afile, wren_key):
-    return util.get_easy_totaldiscs(afile, wren_key, _tag_name='TPA')
-def set_totaldiscsA(afile, wren_key, val):
-    return util.set_easy_totaldiscs(afile, wren_key, val, _tag_name='TPA')
+def get_discnumA(afile, norm_key):
+    return util.get_easy_discnum(afile, norm_key, _tag_name='TPA')
+def set_discnumA(afile, norm_key, val):
+    return util.set_easy_discnum(afile, norm_key, val, _tag_name='TPA')
+def get_totaldiscsA(afile, norm_key):
+    return util.get_easy_totaldiscs(afile, norm_key, _tag_name='TPA')
+def set_totaldiscsA(afile, norm_key, val):
+    return util.set_easy_totaldiscs(afile, norm_key, val, _tag_name='TPA')
 
-def get_tracknumB(afile, wren_key):
-    return util.get_easy_tracknum(afile, wren_key, _tag_name='TRCK')
-def set_tracknumB(afile, wren_key, val):
-    return util.set_easy_tracknum(afile, wren_key, val, _tag_name='TRCK')
-def get_totaltracksB(afile, wren_key):
-    return util.get_easy_totaltracks(afile, wren_key, _tag_name='TRCK')
-def set_totaltracksB(afile, wren_key, val):
-    return util.set_easy_totaltracks(afile, wren_key, val, _tag_name='TRCK')
+def get_tracknumB(afile, norm_key):
+    return util.get_easy_tracknum(afile, norm_key, _tag_name='TRCK')
+def set_tracknumB(afile, norm_key, val):
+    return util.set_easy_tracknum(afile, norm_key, val, _tag_name='TRCK')
+def get_totaltracksB(afile, norm_key):
+    return util.get_easy_totaltracks(afile, norm_key, _tag_name='TRCK')
+def set_totaltracksB(afile, norm_key, val):
+    return util.set_easy_totaltracks(afile, norm_key, val, _tag_name='TRCK')
 
-def get_discnumB(afile, wren_key):
-    return util.get_easy_discnum(afile, wren_key, _tag_name='TPOS')
-def set_discnumB(afile, wren_key, val):
-    return util.set_easy_discnum(afile, wren_key, val, _tag_name='TPOS')
-def get_totaldiscsB(afile, wren_key):
-    return util.get_easy_totaldiscs(afile, wren_key, _tag_name='TPOS')
-def set_totaldiscsB(afile, wren_key, val):
-    return util.set_easy_totaldiscs(afile, wren_key, val, _tag_name='TPOS')
+def get_discnumB(afile, norm_key):
+    return util.get_easy_discnum(afile, norm_key, _tag_name='TPOS')
+def set_discnumB(afile, norm_key, val):
+    return util.set_easy_discnum(afile, norm_key, val, _tag_name='TPOS')
+def get_totaldiscsB(afile, norm_key):
+    return util.get_easy_totaldiscs(afile, norm_key, _tag_name='TPOS')
+def set_totaldiscsB(afile, norm_key, val):
+    return util.set_easy_totaldiscs(afile, norm_key, val, _tag_name='TPOS')
 
-def get_pictures(afile, wren_key):
+def get_pictures(afile, norm_key):
     pics = afile.mfile.tags.getall('APIC') + afile.mfile.tags.getall('PIC')
     artworks = []
     for p in pics:
         artworks.append(Artwork(p.data, pic_type=p.type))
     return MetadataItem(Artwork, None, artworks)
 
-def set_pictures(afile, wren_key, artworks):
+def set_pictures(afile, norm_key, artworks):
     if afile.mfile.tags.getall('APIC'):
         kls = mutagen.id3.APIC
     elif afile.mfile.tags.getall('PIC'):
@@ -226,9 +226,9 @@ class Mp3File(Id3File):
 
         self.tag_map = self.tag_map.copy()
         self.tag_map.update({
-            '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'mp3',
+            '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'mp3',
                                     type=str),
-            '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+            '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                     type=int),
         })
 

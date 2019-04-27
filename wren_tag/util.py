@@ -39,7 +39,7 @@ def sanitize_bool(val):
     else:
         return int(val) !=0
 
-def get_easy_tracknum(afile, wren_key, _tag_name='tracknumber'):
+def get_easy_tracknum(afile, norm_key, _tag_name='tracknumber'):
     tracknumber = str(afile.mfile.get(_tag_name, None))
     if tracknumber in (None, 'None'):
         tracknumber = None
@@ -47,15 +47,15 @@ def get_easy_tracknum(afile, wren_key, _tag_name='tracknumber'):
         tracknumber = int(tracknumber.split('/')[0])
     return tracknumber
 
-def set_easy_tracknum(afile, wren_key, val, _tag_name='tracknumber'):
+def set_easy_tracknum(afile, norm_key, val, _tag_name='tracknumber'):
     tracknumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     tracknumber += [0] * (2 - len(tracknumber))
     tracknumber[0] = int(val)
-    afile.set_raw(wren_key, _tag_name,
+    afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in tracknumber),
                   appendable=False)
 
-def get_easy_totaltracks(afile, wren_key, _tag_name='tracknumber'):
+def get_easy_totaltracks(afile, norm_key, _tag_name='tracknumber'):
     tracknumber = str(afile.mfile.get(_tag_name, None))
     if tracknumber in (None, 'None'):
         tracknumber = None
@@ -66,15 +66,15 @@ def get_easy_totaltracks(afile, wren_key, _tag_name='tracknumber'):
             tracknumber = None
     return tracknumber
 
-def set_easy_totaltracks(afile, wren_key, val, _tag_name='tracknumber'):
+def set_easy_totaltracks(afile, norm_key, val, _tag_name='tracknumber'):
     tracknumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     tracknumber += [0] * (2 - len(tracknumber))
     tracknumber[1] = int(val)
-    afile.set_raw(wren_key, _tag_name,
+    afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in tracknumber),
                   appendable=False)
 
-def get_easy_discnum(afile, wren_key, _tag_name='discnumber'):
+def get_easy_discnum(afile, norm_key, _tag_name='discnumber'):
     discnumber = str(afile.mfile.get(_tag_name, None))
     if discnumber in (None, 'None'):
         discnumber = None
@@ -82,15 +82,15 @@ def get_easy_discnum(afile, wren_key, _tag_name='discnumber'):
         discnumber = int(discnumber.split('/')[0])
     return discnumber
 
-def set_easy_discnum(afile, wren_key, val, _tag_name='discnumber'):
+def set_easy_discnum(afile, norm_key, val, _tag_name='discnumber'):
     discnumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     discnumber += [0] * (2 - len(discnumber))
     discnumber[0] = int(val)
-    afile.set_raw(wren_key, _tag_name,
+    afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in discnumber),
                   appendable=False)
 
-def get_easy_totaldiscs(afile, wren_key, _tag_name='discnumber'):
+def get_easy_totaldiscs(afile, norm_key, _tag_name='discnumber'):
     discnumber = str(afile.mfile.get(_tag_name, None))
     if discnumber in (None, 'None'):
         discnumber = None
@@ -101,11 +101,11 @@ def get_easy_totaldiscs(afile, wren_key, _tag_name='discnumber'):
             discnumber = None
     return discnumber
 
-def set_easy_totaldiscs(afile, wren_key, val, _tag_name='discnumber'):
+def set_easy_totaldiscs(afile, norm_key, val, _tag_name='discnumber'):
     discnumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     discnumber += [0] * (2 - len(discnumber))
     discnumber[1] = int(val)
-    afile.set_raw(wren_key, _tag_name,
+    afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in discnumber),
                   appendable=False)
 

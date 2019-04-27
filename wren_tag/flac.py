@@ -9,13 +9,13 @@ from wren_tag import util
 from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
-def get_pictures(afile, wren_key):
+def get_pictures(afile, norm_key):
     artworks = [Artwork(p.data, width=p.width, height=p.height,
                         fmt=p.mime.split('/')[-1], pic_type=p.type)
                 for p in afile.mfile.pictures]
     return MetadataItem(Artwork, None, artworks)
 
-def set_pictures(afile, wren_key, artworks):
+def set_pictures(afile, norm_key, artworks):
     if not isinstance(artworks, MetadataItem):
         raise TypeError()
 
@@ -32,7 +32,7 @@ def set_pictures(afile, wren_key, artworks):
         pic.depth = art.depth
         afile.mfile.add_picture(pic)
 
-def rm_pictures(afile, wren_key):
+def rm_pictures(afile, norm_key):
     afile.mfile.clear_pictures()
 
 
@@ -68,7 +68,7 @@ class FlacFile(AudioFile):
                                  remover=rm_pictures,
                                  type=Artwork),
 
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'flac',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'flac',
                                 type=str),
     }
 

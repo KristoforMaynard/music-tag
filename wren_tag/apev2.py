@@ -25,26 +25,26 @@ for key, val in pic_type2tag.items():
 del key, val
 
 
-def get_tracknum(afile, wren_key):
-    return util.get_easy_tracknum(afile, wren_key, _tag_name='Track')
-def set_tracknum(afile, wren_key, val):
-    return util.set_easy_tracknum(afile, wren_key, val, _tag_name='Track')
-def get_totaltracks(afile, wren_key):
-    return util.get_easy_totaltracks(afile, wren_key, _tag_name='Track')
-def set_totaltracks(afile, wren_key, val):
-    return util.set_easy_totaltracks(afile, wren_key, val, _tag_name='Track')
+def get_tracknum(afile, norm_key):
+    return util.get_easy_tracknum(afile, norm_key, _tag_name='Track')
+def set_tracknum(afile, norm_key, val):
+    return util.set_easy_tracknum(afile, norm_key, val, _tag_name='Track')
+def get_totaltracks(afile, norm_key):
+    return util.get_easy_totaltracks(afile, norm_key, _tag_name='Track')
+def set_totaltracks(afile, norm_key, val):
+    return util.set_easy_totaltracks(afile, norm_key, val, _tag_name='Track')
 
-def get_discnum(afile, wren_key):
-    return util.get_easy_discnum(afile, wren_key, _tag_name='Disc')
-def set_discnum(afile, wren_key, val):
-    return util.set_easy_discnum(afile, wren_key, val, _tag_name='Disc')
-def get_totaldiscs(afile, wren_key):
-    return util.get_easy_totaldiscs(afile, wren_key, _tag_name='Disc')
-def set_totaldiscs(afile, wren_key, val):
-    return util.set_easy_totaldiscs(afile, wren_key, val, _tag_name='Disc')
+def get_discnum(afile, norm_key):
+    return util.get_easy_discnum(afile, norm_key, _tag_name='Disc')
+def set_discnum(afile, norm_key, val):
+    return util.set_easy_discnum(afile, norm_key, val, _tag_name='Disc')
+def get_totaldiscs(afile, norm_key):
+    return util.get_easy_totaldiscs(afile, norm_key, _tag_name='Disc')
+def set_totaldiscs(afile, norm_key, val):
+    return util.set_easy_totaldiscs(afile, norm_key, val, _tag_name='Disc')
 
 
-def get_pictures(afile, wren_key):
+def get_pictures(afile, norm_key):
     artworks = []
     for pic_tag, pic_type in pic_tag2type.items():
         if pic_tag in afile.mfile.tags:
@@ -56,7 +56,7 @@ def get_pictures(afile, wren_key):
             artworks.append(artwork)
     return MetadataItem(Artwork, None, artworks)
 
-def set_pictures(afile, wren_key, artworks):
+def set_pictures(afile, norm_key, artworks):
     for art in artworks.values:
         pic_tag = pic_type2tag[art.pic_type]
         raw = (pic_tag + '.jpg').encode('ascii') + b'\0' + art.raw
@@ -102,13 +102,13 @@ class Apev2File(AudioFile):
                                  remover=list(pic_tag2type.keys()),
                                  type=Artwork),
 
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                 type=str),
-        '#channels': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#channels': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                 type=int),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                         type=int),
-        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                      type=int),
     }
 
@@ -128,11 +128,11 @@ class WavePackFile(Apev2File):
 
     _TAG_MAP = Apev2File._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'WavePack',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'WavePack',
                                 type=str),
-        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                   type=int),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                         type=int),
     })
 

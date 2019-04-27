@@ -18,21 +18,21 @@ except ImportError:
 from wren_tag import util
 
 
-def getter_not_implemented(afile, wren_key):
+def getter_not_implemented(afile, norm_key):
     raise NotImplementedError("getter: '{0}' not implemented for {1}"
-                              "".format(wren_key, type(afile)))
+                              "".format(norm_key, type(afile)))
 
-def setter_not_implemented(afile, wren_key, val):
+def setter_not_implemented(afile, norm_key, val):
     raise NotImplementedError("setter: '{0}' not implemented for {1}"
-                              "".format(wren_key, type(afile)))
+                              "".format(norm_key, type(afile)))
 
-def albumartist_from_comp(afile, wren_key):
+def albumartist_from_comp(afile, norm_key):
     ret = None
     if afile.get('compilation', default=None):
         ret = 'Various Artists'
     return ret
 
-def comp_from_albumartist(afile, wren_key):
+def comp_from_albumartist(afile, norm_key):
     ret = None
     albumartist = afile.get('albumartist', default=None)
     if albumartist:
@@ -285,10 +285,10 @@ class AudioFile(object):
         'artist': ('artist', 'albumartist'),
         'compilation': ('compilation', comp_from_albumartist),
         'discnumber': ('discnumber',
-                       lambda afile, wren_key: 1
+                       lambda afile, norm_key: 1
                        ),
         'totaldiscs': ('totaldiscs',
-                       lambda afile, wren_key: afile.get('discnumber', 1)
+                       lambda afile, norm_key: afile.get('discnumber', 1)
                        ),
     }
 
@@ -330,27 +330,27 @@ class AudioFile(object):
         """BE CAREFUL, I doubt I did a good job testing tag editing"""
         self.mfile.save()
 
-    def _normalize_wren_key(self, wren_key):
-        wren_key = wren_key.replace(' ', '').replace('_', '').replace('-', '').lower()
-        if self.tag_aliases and wren_key in self.tag_aliases:
-            wren_key = self.tag_aliases[wren_key]
-        return wren_key
+    def _normalize_norm_key(self, norm_key):
+        norm_key = norm_key.replace(' ', '').replace('_', '').replace('-', '').lower()
+        if self.tag_aliases and norm_key in self.tag_aliases:
+            norm_key = self.tag_aliases[norm_key]
+        return norm_key
 
-    def resolve(self, wren_key, default=None):
-        wren_key = self._normalize_wren_key(wren_key)
-        tmap = self.tag_map[wren_key]
+    def resolve(self, norm_key, default=None):
+        norm_key = self._normalize_norm_key(norm_key)
+        tmap = self.tag_map[norm_key]
 
         ret = None
-        if wren_key in self.resolvers:
-            for resolver in self.resolvers[wren_key]:
+        if norm_key in self.resolvers:
+            for resolver in self.resolvers[norm_key]:
                 if hasattr(resolver, '__call__'):
-                    ret = resolver(self, wren_key)
+                    ret = resolver(self, norm_key)
                 else:
                     ret = self.get(resolver, default=None, _raw_default=True)
                 if ret is not None:
                     break
         else:
-            ret = self.get(wren_key, default=None, _raw_default=True)
+            ret = self.get(norm_key, default=None, _raw_default=True)
 
         if not (ret is None or isinstance(ret, MetadataItem)):
             ret = MetadataItem(tmap.type, tmap.sanitizer, ret)
@@ -363,16 +363,16 @@ class AudioFile(object):
     def _ft_getter(self, key):
         return self.mfile.tags.get(key, None)
 
-    def get(self, wren_key, default=None, _raw_default=False):
-        wren_key = self._normalize_wren_key(wren_key)
-        tmap = self.tag_map[wren_key]
+    def get(self, norm_key, default=None, _raw_default=False):
+        norm_key = self._normalize_norm_key(norm_key)
+        tmap = self.tag_map[norm_key]
 
         ret = None
         if hasattr(tmap.getter, '__call__'):
-            val = tmap.getter(self, wren_key)
+            val = tmap.getter(self, norm_key)
             ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
                                                         val)
-        elif wren_key.startswith('#'):
+        elif norm_key.startswith('#'):
             val = tmap.type(getattr(self.mfile.info, tmap.getter))
             ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
                                                         val)
@@ -382,7 +382,7 @@ class AudioFile(object):
                 if val is not None:
                     break
                 if hasattr(getter, '__call__'):
-                    val = getter(self, wren_key)
+                    val = getter(self, norm_key)
                 elif getter in self.mfile.tags:
                     val = self._ft_getter(getter)
             ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
@@ -409,17 +409,17 @@ class AudioFile(object):
         else:
             self.mfile.tags[key] = md_val.value
 
-    def set_raw(self, wren_key, key, md_val, appendable=True):
+    def set_raw(self, norm_key, key, md_val, appendable=True):
         if not isinstance(md_val, MetadataItem):
             if isinstance(md_val, (list, tuple)):
                 md_val = MetadataItem(type(md_val[0]), None, md_val)
             else:
                 md_val = MetadataItem(type(md_val), None, md_val)
 
-        appendable = appendable and wren_key not in self.singular_keys
-        if wren_key in self.singular_keys and len(md_val.values) > 1:
+        appendable = appendable and norm_key not in self.singular_keys
+        if norm_key in self.singular_keys and len(md_val.values) > 1:
             raise ValueError("Key '{0}' can not have multiple values; {1}"
-                             "".format(wren_key, md_val.values))
+                             "".format(norm_key, md_val.values))
 
         try:
             self._ft_setter(key, md_val, appendable=appendable)
@@ -435,15 +435,15 @@ class AudioFile(object):
             if not success:
                 raise
 
-    def set(self, wren_key, val):
-        wren_key = self._normalize_wren_key(wren_key)
-        tmap = self.tag_map[wren_key]
+    def set(self, norm_key, val):
+        norm_key = self._normalize_norm_key(norm_key)
+        tmap = self.tag_map[norm_key]
         if not isinstance(val, MetadataItem):
             val = MetadataItem(tmap.type, tmap.sanitizer, val)
 
         if hasattr(tmap.setter, '__call__'):
-            tmap.setter(self, wren_key, val)
-        elif wren_key.startswith('#'):
+            tmap.setter(self, norm_key, val)
+        elif norm_key.startswith('#'):
             raise KeyError("Can not set file info (tags that begin with #)")
         elif isinstance(tmap.setter, (list, tuple)):
             value_set = False
@@ -451,50 +451,50 @@ class AudioFile(object):
                 if value_set:
                     break
                 if hasattr(tmap.setter, '__call__'):
-                    tmap.setter(self, wren_key, val)
+                    tmap.setter(self, norm_key, val)
                     value_set = True
                 elif setter in self.mfile.tags:
-                    self.set_raw(wren_key, setter, val)
+                    self.set_raw(norm_key, setter, val)
                     value_set = True
             if not value_set:
-                self.set_raw(wren_key, tmap.setter[0], val)
+                self.set_raw(norm_key, tmap.setter[0], val)
         else:
-             self.set_raw(wren_key, tmap.setter, val)
+             self.set_raw(norm_key, tmap.setter, val)
 
-    def append_tag(self, wren_key, val):
-        wren_key = self._normalize_wren_key(wren_key)
+    def append_tag(self, norm_key, val):
+        norm_key = self._normalize_norm_key(norm_key)
         if not self.appendable:
             raise NotAppendable("{0} can not have multiple values for tags"
                                 "".format(self.__class__.__name__))
-        if wren_key in self.singular_keys:
+        if norm_key in self.singular_keys:
             raise NotAppendable("{0} can not have multiple values for '{1}'"
-                                "".format(self.__class__.__name__, wren_key))
+                                "".format(self.__class__.__name__, norm_key))
 
-        existing_val = self.get(wren_key, default=None)
+        existing_val = self.get(norm_key, default=None)
         if existing_val is None:
             new_val = val
         else:
             existing_val.append(val)
             new_val = existing_val
-        self.set(wren_key, new_val)
+        self.set(norm_key, new_val)
 
-    def append(self, wren_key, val):
+    def append(self, norm_key, val):
         # I'm not sure how i feel about this synonym since append usually
         # takes a single argument in python (i.e. lists etc)
-        return self.append_tag(wren_key, val)
+        return self.append_tag(norm_key, val)
 
     def _ft_rmtag(self, key):
         if key in self.mfile.tags:
             del self.mfile.tags[key]
 
-    def remove_tag(self, wren_key):
-        wren_key = self._normalize_wren_key(wren_key)
+    def remove_tag(self, norm_key):
+        norm_key = self._normalize_norm_key(norm_key)
 
-        if wren_key.startswith('#'):
+        if norm_key.startswith('#'):
             raise KeyError("Can not remove tags that start with '#' since "
                            "they are not real tags")
 
-        tmap = self.tag_map[wren_key]
+        tmap = self.tag_map[norm_key]
 
         remover = None
         if tmap.remover:
@@ -514,24 +514,24 @@ class AudioFile(object):
 
         if remover is not None:
             if hasattr(remover, '__call__'):
-                remover(self, wren_key)
+                remover(self, norm_key)
             elif isinstance(remover, (list, tuple)):
                 for key in remover:
                     self._ft_rmtag(key)
             elif isinstance(remover, util.string_types):
                 self._ft_rmtag(remover)
 
-    def __getitem__(self, wren_key):
-        return self.get(wren_key, default=None)
+    def __getitem__(self, norm_key):
+        return self.get(norm_key, default=None)
 
-    def __setitem__(self, wren_key, val):
-        self.set(wren_key, val)
+    def __setitem__(self, norm_key, val):
+        self.set(norm_key, val)
 
     def __contains__(self, key):
         return self[key].values != []
 
-    def __delitem__(self, wren_key):
-        self.remove_tag(wren_key)
+    def __delitem__(self, norm_key):
+        self.remove_tag(norm_key)
 
 ##
 ## EOF

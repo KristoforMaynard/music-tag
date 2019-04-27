@@ -13,63 +13,63 @@ from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 mutagen.easymp4.EasyMP4Tags.RegisterTextKey("compilation", "cpil")
 
 
-def get_tracknum(afile, wren_key):
+def get_tracknum(afile, norm_key):
     trkn = afile.mfile.get('trkn', [(None, None)])[0]
     try:
         return trkn[0]
     except IndexError:
         return None
 
-def set_tracknum(afile, wren_key, val):
+def set_tracknum(afile, norm_key, val):
     trkn = list(afile.mfile.tags.get('trkn', [(0, 0)])[0])
     trkn += [0] * (2 - len(trkn))
     trkn[0] = int(val)
     trkn = tuple([0 if i is None else int(i) for i in trkn])
     afile.mfile.tags['trkn'] = [trkn]
 
-def get_totaltracks(afile, wren_key):
+def get_totaltracks(afile, norm_key):
     trkn = afile.mfile.get('trkn', [(None, None)])[0]
     try:
         return trkn[1]
     except IndexError:
         return None
 
-def set_totaltracks(afile, wren_key, val):
+def set_totaltracks(afile, norm_key, val):
     trkn = list(afile.mfile.tags.get('trkn', [(0, 0)])[0])
     trkn += [0] * (2 - len(trkn))
     trkn[1] = int(val)
     trkn = tuple([0 if i is None else int(i) for i in trkn])
     afile.mfile.tags['trkn'] = [trkn]
 
-def get_discnum(afile, wren_key):
+def get_discnum(afile, norm_key):
     trkn = afile.mfile.get('disk', [(None, None)])[0]
     try:
         return trkn[0]
     except IndexError:
         return None
 
-def set_discnum(afile, wren_key, val):
+def set_discnum(afile, norm_key, val):
     disc = list(afile.mfile.tags.get('disk', [(0, 0)])[0])
     disc += [0] * (2 - len(disc))
     disc[0] = int(val)
     disc = [0 if i is None else i for i in disc]
     afile.mfile.tags['disk'] = [tuple(disc)]
 
-def get_totaldiscs(afile, wren_key):
+def get_totaldiscs(afile, norm_key):
     trkn = afile.mfile.get('disk', [(None, None)])[0]
     try:
         return trkn[1]
     except IndexError:
         return None
 
-def set_totaldiscs(afile, wren_key, val):
+def set_totaldiscs(afile, norm_key, val):
     disc = list(afile.mfile.tags.get('disk', [(0, 0)])[0])
     disc += [0] * (2 - len(disc))
     disc[1] = int(val)
     disc = [0 if i is None else i for i in disc]
     afile.mfile.tags['disk'] = [tuple(disc)]
 
-def get_artwork(afile, wren_key):
+def get_artwork(afile, norm_key):
     fmt_lut = {mutagen.mp4.MP4Cover.FORMAT_JPEG: 'jpeg',
                mutagen.mp4.MP4Cover.FORMAT_PNG: 'png',
               }
@@ -77,7 +77,7 @@ def get_artwork(afile, wren_key):
 
     return MetadataItem(Artwork, None, artworks)
 
-def set_artwork(afile, wren_key, artworks):
+def set_artwork(afile, norm_key, artworks):
     if not isinstance(artworks, MetadataItem):
         raise TypeError()
 

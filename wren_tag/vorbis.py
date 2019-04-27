@@ -15,7 +15,7 @@ from wren_tag import util
 from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
-def get_pictures(afile, wren_key):
+def get_pictures(afile, norm_key):
     artworks = []
 
     pics_dat = afile.mfile.get("coverart", [])
@@ -31,7 +31,7 @@ def get_pictures(afile, wren_key):
 
     return MetadataItem(Artwork, None, artworks)
 
-def set_pictures(afile, wren_key, artworks):
+def set_pictures(afile, norm_key, artworks):
     if not isinstance(artworks, MetadataItem):
         raise TypeError()
 
@@ -51,7 +51,7 @@ def set_pictures(afile, wren_key, artworks):
         pics.append(pic_data)
     afile.mfile.tags['metadata_block_picture'] = pics
 
-def rm_pictures(afile, wren_key):
+def rm_pictures(afile, norm_key):
     for k in ('coverart', 'coverartmime', 'metadata_block_picture'):
         if k in afile.mfile.tags:
             del afile.mfile.tags[k]
@@ -118,9 +118,9 @@ class OggVorbisFile(OggFile):
 
     _TAG_MAP = OggFile._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'Ogg Vorbis',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'Ogg Vorbis',
                                 type=str),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                 type=int),
     })
 
@@ -131,12 +131,12 @@ class OggOpusFile(OggFile):
 
     _TAG_MAP = OggFile._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'Ogg Opus',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'Ogg Opus',
                                 type=str),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                 type=int),
-        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                      type=int),
-        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
+        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
                                   type=int),
     })
