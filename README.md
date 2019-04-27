@@ -28,21 +28,21 @@ Keys are not case sensitive and can contain arbitrary whitespace, '-', and '_'
 characters. In other words, ``Album Artist``, ``album-artist``, and
 ``album_artist`` are all synonyms for ``albumartist``. Also, ``disk`` is synonymous with ``disc``.
 
-- ``tracktitle``
-- ``artist``
 - ``album``
 - ``albumartist``
-- ``composer``
-- ``tracknumber``
-- ``totaltracks``
-- ``discnumber``
-- ``totaldiscs``
-- ``genre``
-- ``year``
-- ``compilation``
-- ``lyrics``
-- ``comment``
+- ``artist``
 - ``artwork``
+- ``comment``
+- ``compilation``
+- ``composer``
+- ``discnumber``
+- ``genre``
+- ``lyrics``
+- ``totaldiscs``
+- ``totaltracks``
+- ``tracknumber``
+- ``tracktitle``
+- ``year``
 
 ## Examples
 
