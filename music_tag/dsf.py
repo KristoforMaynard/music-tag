@@ -3,8 +3,8 @@
 
 import mutagen.dsf
 
-from wren_tag.file import TAG_MAP_ENTRY
-from wren_tag.id3 import Id3File
+from music_tag.file import TAG_MAP_ENTRY
+from music_tag.id3 import Id3File
 
 
 class DsfFile(Id3File):

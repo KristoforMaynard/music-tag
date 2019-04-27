@@ -8,26 +8,26 @@ import os
 
 import mutagen
 
-from wren_tag import file
-from wren_tag import util
-from wren_tag import aac
-from wren_tag import aiff
-from wren_tag import apev2
-from wren_tag import asf
-from wren_tag import dsf
-from wren_tag import flac
-from wren_tag import id3
-from wren_tag import mp4
-from wren_tag import smf
-from wren_tag import vorbis
+from music_tag import file
+from music_tag import util
+from music_tag import aac
+from music_tag import aiff
+from music_tag import apev2
+from music_tag import asf
+from music_tag import dsf
+from music_tag import flac
+from music_tag import id3
+from music_tag import mp4
+from music_tag import smf
+from music_tag import vorbis
 
-from wren_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
+from music_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
 
 
 __version__ = """0.1.0"""
 
 
-logger = logging.getLogger("wren")
+logger = logging.getLogger("music_tag")
 log = logger
 
 

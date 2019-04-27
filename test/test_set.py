@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 import _test_common as test_common
-wren_tag = test_common.wren_tag
+music_tag = test_common.music_tag
 
 
 with open(os.path.join(test_common.sample_dir, 'imgA.jpg'), 'rb') as fin:
@@ -39,13 +39,13 @@ def _main():
         shutil.copy(fname, temp_fname)
         rel_fname = os.path.relpath(temp_fname, test_common.sample_dir)
 
-        f = wren_tag.load_file(temp_fname)
+        f = music_tag.load_file(temp_fname)
         for key, val in new_tags.items():
             f[key] = val
 
         f.save()
 
-        f = wren_tag.load_file(temp_fname)
+        f = music_tag.load_file(temp_fname)
         test_common.check_tags(f, rel_fname, new_tags)
 
         os.remove(temp_fname)

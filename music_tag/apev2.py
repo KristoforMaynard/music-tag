@@ -10,8 +10,8 @@ import mutagen.monkeysaudio
 import mutagen.optimfrog
 from mutagen.id3 import PictureType
 
-from wren_tag import util
-from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
+from music_tag import util
+from music_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
 # FIXME: find more complete mapping between id3 tag pic types and apev2 tags

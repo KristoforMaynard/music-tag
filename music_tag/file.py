@@ -15,7 +15,7 @@ except ImportError:
     BICUBIC = None
     _HAS_PIL = False
 
-from wren_tag import util
+from music_tag import util
 
 
 def getter_not_implemented(afile, norm_key):

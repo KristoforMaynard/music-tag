@@ -6,8 +6,8 @@
 import mutagen.mp4
 import mutagen.easymp4
 
-from wren_tag import util
-from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
+from music_tag import util
+from music_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
 mutagen.easymp4.EasyMP4Tags.RegisterTextKey("compilation", "cpil")

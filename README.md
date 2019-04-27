@@ -1,6 +1,6 @@
-# Wren-tag
+# music-tag
 
-Wren-tag is a library for editing audio metadata with an interface
+music-tag is a library for editing audio metadata with an interface
 that does not depend on the underlying file format. In other words, editing
 mp3 files shouldn not be any different than flac, m4a, ... This library is
 just a layer on top of [mutagen](https://mutagen.readthedocs.io/en/latest/),
@@ -49,9 +49,9 @@ characters. In other words, ``Album Artist``, ``album-artist``, and
 ### Reading tags
 
 ``` python
-import wren_tag
+import music_tag
 
-f = wren_tag.load_file("Wren-tag/sample/440Hz.m4a")
+f = music_tag.load_file("music-tag/sample/440Hz.m4a")
 
 # dict access returns a MetadataItem
 title_item = f['title']
@@ -110,9 +110,9 @@ art.first.depth  # -> 24
 art.first.data  # -> b'... raw image data ...'
 
 # set artwork
-with open('wren_tag/test/sample/imgA.jpg', 'rb') as img_in:
+with open('music_tag/test/sample/imgA.jpg', 'rb') as img_in:
     f['artwork'] = img_in.read()
-with open('wren_tag/test/sample/imgB.jpg', 'rb') as img_in:
+with open('music_tag/test/sample/imgB.jpg', 'rb') as img_in:
     f.append_tag('artwork', img_in.read())
 
 # Make a thumbnail (requires Pillow)

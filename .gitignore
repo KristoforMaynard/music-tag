@@ -7,7 +7,7 @@ dist/
 
 MANIFEST
 .install_manifest.json
-Wren-tag.egg-info/
-Wren_tag.egg-info/
+music-tag.egg-info/
+music_tag.egg-info/
 
-Wren-tag.sublime-workspace
+music-tag.sublime-workspace

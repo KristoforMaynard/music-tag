@@ -1,12 +1,12 @@
 import os
 import sys
 
-wren_tag_dir = os.path.join(os.path.dirname(__file__), '..')
-sys.path.append(os.path.join(wren_tag_dir, '..'))
+music_tag_dir = os.path.join(os.path.dirname(__file__), '..')
+sys.path.append(os.path.join(music_tag_dir, '..'))
 
-from wren_tag import load_file
+from music_tag import load_file
 
-sample_dir = os.path.join(wren_tag_dir, 'sample')
+sample_dir = os.path.join(music_tag_dir, 'sample')
 
 files = [
     load_file(os.path.join(sample_dir, '440Hz.aac')),

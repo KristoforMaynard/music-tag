@@ -3,7 +3,7 @@
 
 import mutagen.smf
 
-from wren_tag.file import AudioFile
+from music_tag.file import AudioFile
 
 
 # smf: standard midi file

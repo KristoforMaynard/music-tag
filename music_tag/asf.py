@@ -5,7 +5,7 @@
 
 import mutagen.asf
 
-from wren_tag.file import AudioFile
+from music_tag.file import AudioFile
 
 
 class AsfFile(AudioFile):

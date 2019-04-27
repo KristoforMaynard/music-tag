@@ -2,24 +2,40 @@
 # coding: utf-8
 
 import base64
+import itertools
 
-import mutagen.flac
+import mutagen.ogg
+import mutagen.oggvorbis
+import mutagen.oggopus
+import mutagen.oggflac
+import mutagen.oggtheora
+import mutagen.oggspeex
 
-from wren_tag import util
-from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
+from music_tag import util
+from music_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
 def get_pictures(afile, norm_key):
-    artworks = [Artwork(p.data, width=p.width, height=p.height,
-                        fmt=p.mime.split('/')[-1], pic_type=p.type)
-                for p in afile.mfile.pictures]
+    artworks = []
+
+    pics_dat = afile.mfile.get("coverart", [])
+    mimes = afile.mfile.get("coverartmime", [])
+    for dat, mime in itertools.zip_longest(pics_dat, mimes, fillvalue=""):
+        image_data = base64.b64decode(dat.encode("ascii"))
+        artworks = Artwork(image_data)
+
+    for p in afile.mfile.tags['metadata_block_picture']:
+        pb = util.parse_picture_block(base64.standard_b64decode(p))
+        art = Artwork(pb.data, width=pb.width, height=pb.height, fmt=pb.format)
+        artworks.append(art)
+
     return MetadataItem(Artwork, None, artworks)
 
 def set_pictures(afile, norm_key, artworks):
     if not isinstance(artworks, MetadataItem):
         raise TypeError()
 
-    afile.mfile.clear_pictures()
+    pics = []
     for i, art in enumerate(artworks.values):
         if any(v is None for v in (art.mime, art.width, art.height, art.depth)):
             raise ImportError("Please install Pillow to properly handle images")
@@ -30,15 +46,20 @@ def set_pictures(afile, norm_key, artworks):
         pic.width = art.width
         pic.height = art.height
         pic.depth = art.depth
-        afile.mfile.add_picture(pic)
+
+        pic_data = base64.b64encode(pic.write()).decode('ascii')
+        pics.append(pic_data)
+    afile.mfile.tags['metadata_block_picture'] = pics
 
 def rm_pictures(afile, norm_key):
-    afile.mfile.clear_pictures()
+    for k in ('coverart', 'coverartmime', 'metadata_block_picture'):
+        if k in afile.mfile.tags:
+            del afile.mfile.tags[k]
 
 
-class FlacFile(AudioFile):
-    tag_format = "FLAC"
-    mutagen_kls = mutagen.flac.FLAC
+class OggFile(AudioFile):
+    tag_format = "Ogg"
+    mutagen_kls = mutagen.ogg.OggFileType
 
     _TAG_MAP = {
         'tracktitle': TAG_MAP_ENTRY(getter='title', setter='title', type=str),
@@ -67,9 +88,6 @@ class FlacFile(AudioFile):
         'artwork': TAG_MAP_ENTRY(getter=get_pictures, setter=set_pictures,
                                  remover=rm_pictures,
                                  type=Artwork),
-
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'flac',
-                                type=str),
     }
 
     def _ft_setter(self, key, md_val, appendable=True):
@@ -77,3 +95,48 @@ class FlacFile(AudioFile):
             self.mfile.tags[key] = [str(v) for v in md_val.values]
         else:
             self.mfile.tags[key] = str(md_val.value)
+
+
+class OggFlacFile(OggFile):
+    tag_format = "OggFlac"
+    mutagen_kls = mutagen.oggflac.OggFLAC
+
+
+class OggSpeexFile(OggFile):
+    tag_format = "OggSpeex"
+    mutagen_kls = mutagen.oggspeex.OggSpeex
+
+
+class OggTheoraFile(OggFile):
+    tag_format = "OggTheora"
+    mutagen_kls = mutagen.oggtheora.OggTheora
+
+
+class OggVorbisFile(OggFile):
+    tag_format = "OggVorbis"
+    mutagen_kls = mutagen.oggvorbis.OggVorbis
+
+    _TAG_MAP = OggFile._TAG_MAP.copy()
+    _TAG_MAP.update({
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'Ogg Vorbis',
+                                type=str),
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
+                                type=int),
+    })
+
+
+class OggOpusFile(OggFile):
+    tag_format = "OggOpus"
+    mutagen_kls = mutagen.oggopus.OggOpus
+
+    _TAG_MAP = OggFile._TAG_MAP.copy()
+    _TAG_MAP.update({
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, norm_key: 'Ogg Opus',
+                                type=str),
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
+                                type=int),
+        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
+                                     type=int),
+        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, norm_key: None,
+                                  type=int),
+    })

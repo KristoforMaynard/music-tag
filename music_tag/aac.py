@@ -3,8 +3,8 @@
 
 import mutagen.aac
 
-from wren_tag.file import TAG_MAP_ENTRY
-from wren_tag.apev2 import Apev2File
+from music_tag.file import TAG_MAP_ENTRY
+from music_tag.apev2 import Apev2File
 
 
 class AacFile(Apev2File):

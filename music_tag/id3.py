@@ -10,8 +10,8 @@ import mutagen.easyid3
 import mutagen.mp3
 import mutagen.trueaudio
 
-from wren_tag import util
-from wren_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
+from music_tag import util
+from music_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
 def get_tracknumA(afile, norm_key):

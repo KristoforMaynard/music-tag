@@ -30,11 +30,11 @@ def get_version(init_py):
                 return m.groups()[1]
     return 'x.x.x'
 
-version = get_version(os.path.join('wren_tag', '__init__.py'))
-url = "https://github.com/KristoforMaynard/Wren-tag"
+version = get_version(os.path.join('music_tag', '__init__.py'))
+url = "https://github.com/KristoforMaynard/music-tag"
 download_url = "{0}/archive/{1}.zip".format(url, version)
 
-pkgs = ['wren_tag',
+pkgs = ['music_tag',
        ]
 scripts = glob(os.path.join('scripts', '*'))
 
@@ -60,7 +60,7 @@ def _main():
     with open("README.md", "r") as fh:
         long_description = fh.read()
 
-    setup(name='Wren-tag',
+    setup(name='music-tag',
           version=version,
           description='Simple interface to edit audio file metadata',
           long_description=long_description,
