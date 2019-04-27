@@ -16,7 +16,7 @@ class AiffFile(Id3File):
 
         self.tag_map = self.tag_map.copy()
         self.tag_map.update({
-            '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'aiff',
+            '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'aiff',
                                     type=str),
             '#bitspersample': TAG_MAP_ENTRY(getter='sample_size', type=int),
         })

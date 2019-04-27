@@ -118,9 +118,9 @@ class OggVorbisFile(OggFile):
 
     _TAG_MAP = OggFile._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'Ogg Vorbis',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'Ogg Vorbis',
                                 type=str),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                 type=int),
     })
 
@@ -131,12 +131,12 @@ class OggOpusFile(OggFile):
 
     _TAG_MAP = OggFile._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'Ogg Opus',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'Ogg Opus',
                                 type=str),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                 type=int),
-        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                      type=int),
-        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                   type=int),
     })

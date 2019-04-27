@@ -68,7 +68,7 @@ class FlacFile(AudioFile):
                                  remover=rm_pictures,
                                  type=Artwork),
 
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'flac',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'flac',
                                 type=str),
     }
 

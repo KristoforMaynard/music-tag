@@ -102,13 +102,13 @@ class Apev2File(AudioFile):
                                  remover=list(pic_tag2type.keys()),
                                  type=Artwork),
 
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                 type=str),
-        '#channels': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#channels': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                 type=int),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                         type=int),
-        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#samplerate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                      type=int),
     }
 
@@ -128,11 +128,11 @@ class WavePackFile(Apev2File):
 
     _TAG_MAP = Apev2File._TAG_MAP.copy()
     _TAG_MAP.update({
-        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'WavePack',
+        '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'WavePack',
                                 type=str),
-        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitrate': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                   type=int),
-        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: None,
+        '#bitspersample': TAG_MAP_ENTRY(getter=lambda afile, wren_key: None,
                                         type=int),
     })
 

@@ -16,6 +16,6 @@ class DsfFile(Id3File):
 
         self.tag_map = self.tag_map.copy()
         self.tag_map.update({
-            '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_tag: 'dsf',
+            '#codec': TAG_MAP_ENTRY(getter=lambda afile, wren_key: 'dsf',
                                     type=str),
         })

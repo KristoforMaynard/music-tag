@@ -285,10 +285,10 @@ class AudioFile(object):
         'artist': ('artist', 'albumartist'),
         'compilation': ('compilation', comp_from_albumartist),
         'discnumber': ('discnumber',
-                       lambda afile, wren_tag: 1
+                       lambda afile, wren_key: 1
                        ),
         'totaldiscs': ('totaldiscs',
-                       lambda afile, wren_tag: afile.get('discnumber', 1)
+                       lambda afile, wren_key: afile.get('discnumber', 1)
                        ),
     }
 
