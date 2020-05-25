@@ -236,6 +236,35 @@ class Artwork(object):
                                         md5.hexdigest())
 
 
+class RawProxy(object):
+    def __init__(self, parent):
+        self.parent = parent
+
+    def get(self, norm_key, default=None):
+        raw_key = norm_key
+        norm_key = self.parent._normalize_norm_key(norm_key)
+        if norm_key in self.parent.tag_map:
+            md_item = self.parent.get(norm_key, default=default)
+            md_item.type = str
+            md_item.sanitizer = None
+            return md_item
+        else:
+            return self.parent.mfile[raw_key]
+
+    def set(self, norm_key, val):
+        raw_key = norm_key
+        norm_key = self.parent._normalize_norm_key(norm_key)
+        if norm_key in self.parent.tag_map:
+            self.parent[norm_key] = val
+        else:
+            self.parent.mfile[raw_key] = val
+
+    def __getitem__(self, norm_key):
+        return self.get(norm_key, default=None)
+    def __setitem__(self, norm_key, val):
+        self.set(norm_key, val)
+
+
 class NotAppendable(Exception):
     pass
 
@@ -325,6 +354,10 @@ class AudioFile(object):
 
         if self.mfile.tags is None:
             self.mfile.add_tags()
+
+    @property
+    def raw(self):
+        return RawProxy(self)
 
     def save(self):
         """BE CAREFUL, I doubt I did a good job testing tag editing"""
