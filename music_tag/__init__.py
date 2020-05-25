@@ -41,13 +41,11 @@ def _subclass_spider_dfs(kls, _lst=None):
 
 
 def load_file(filename, err='raise'):
-    raw_filename = filename
     if not os.path.exists(filename):
-        filename = os.path.expanduser(raw_filename)
-    if not os.path.exists(filename):
-        filename = os.path.expandvars(raw_filename)
-    if not os.path.exists(filename):
-        filename = os.path.expanduser(os.path.expandvars(raw_filename))
+        if os.path.exists(os.path.expanduser(os.path.expandvars(filename))):
+            filename = os.path.expanduser(os.path.expandvars(filename))
+        elif os.path.exists(os.path.expanduser(filename)):
+            filename = os.path.expanduser(filename)
 
     mfile = mutagen.File(filename, easy=False)
     ret = None
