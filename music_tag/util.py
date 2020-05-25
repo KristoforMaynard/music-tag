@@ -30,6 +30,17 @@ def sanitize_year(year):
             raise ValueError("Could not extract year from: {0}".format(year))
     return year
 
+def sanitize_int(val):
+    try:
+        ret = int(val)
+    except ValueError:
+        m = re.match(r'^.*?([0-9]+).*?$', val)
+        if m:
+            ret = int(m.group(1))
+        else:
+            raise ValueError('int contains no in {0}'.format(val))
+    return ret
+
 def sanitize_bool(val):
     val = str(val).strip().lower()
     if val in ('true', '1'):
