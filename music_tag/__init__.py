@@ -24,7 +24,7 @@ from music_tag import vorbis
 from music_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
 
 
-__version__ = """0.3.0"""
+__version__ = """0.3.1"""
 
 
 logger = logging.getLogger("music_tag")

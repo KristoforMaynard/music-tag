@@ -127,7 +127,7 @@ art.first.raw_thumbnail([64, 64])  # -> b'... raw thumbnail data ...'
 f.save()
 ```
 
-### Disable Type Normalization
+### Skipping Type Normalization
 
 By default, tags are validated and normalized. For instance, track numbers
 and years are return as integers. Some tag formats store everything as strings
