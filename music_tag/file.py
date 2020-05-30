@@ -87,14 +87,20 @@ class MetadataItem(object):
         for i, v in enumerate(self._values):
             if self.sanitizer is not None:
                 v = self.sanitizer(v)
-            if not isinstance(v, self.type) and v is not None:
+            if not (self.type is None or v is None or isinstance(v, self.type)):
                 v = self.type(v)
             self._values[i] = v
 
     @property
     def value(self):
         try:
-            val = self.type(self)
+            if self.type is None:
+                if len(self.values) == 1:
+                    val = self.values[0]
+                else:
+                    val = str(self)
+            else:
+                val = self.type(self)
         except TypeError:
             values = self.values
             if not values:
@@ -117,7 +123,7 @@ class MetadataItem(object):
     def append(self, val):
         if self.sanitizer is not None:
             val = self.sanitizer(val)
-        if not isinstance(val, self.type) and val is not None:
+        if not (self.type is None or val is None or isinstance(val, self.type)):
             val = self.type(val)
 
         if self._values:
@@ -240,13 +246,14 @@ class RawProxy(object):
     def __init__(self, parent):
         self.parent = parent
 
+    def resolve(self, norm_key, default=None):
+        return self.parent.resolve(norm_key, default, typeless=True)
+
     def get(self, norm_key, default=None):
         raw_key = norm_key
         norm_key = self.parent._normalize_norm_key(norm_key)
         if norm_key in self.parent.tag_map:
-            md_item = self.parent.get(norm_key, default=default)
-            md_item.type = str
-            md_item.sanitizer = None
+            md_item = self.parent.get(norm_key, default=default, typeless=True)
             return md_item
         else:
             return self.parent.mfile[raw_key]
@@ -255,7 +262,7 @@ class RawProxy(object):
         raw_key = norm_key
         norm_key = self.parent._normalize_norm_key(norm_key)
         if norm_key in self.parent.tag_map:
-            self.parent[norm_key] = val
+            self.parent.set(norm_key, val, typeless=True)
         else:
             self.parent.mfile[raw_key] = val
 
@@ -369,9 +376,11 @@ class AudioFile(object):
             norm_key = self.tag_aliases[norm_key]
         return norm_key
 
-    def resolve(self, norm_key, default=None):
+    def resolve(self, norm_key, default=None, typeless=False):
         norm_key = self._normalize_norm_key(norm_key)
         tmap = self.tag_map[norm_key]
+        md_type = None if typeless else tmap.type
+        md_sanitizer = None if typeless else tmap.sanitizer
 
         ret = None
         if norm_key in self.resolvers:
@@ -379,35 +388,41 @@ class AudioFile(object):
                 if hasattr(resolver, '__call__'):
                     ret = resolver(self, norm_key)
                 else:
-                    ret = self.get(resolver, default=None, _raw_default=True)
+                    ret = self.get(resolver, default=None, _raw_default=True,
+                                   typeless=typeless)
                 if ret is not None:
                     break
         else:
-            ret = self.get(norm_key, default=None, _raw_default=True)
+            ret = self.get(norm_key, default=None, _raw_default=True,
+                           typeless=typeless)
 
         if not (ret is None or isinstance(ret, MetadataItem)):
-            ret = MetadataItem(tmap.type, tmap.sanitizer, ret)
+            ret = MetadataItem(md_type, md_sanitizer, ret)
 
         if ret is None:
-            ret = MetadataItem(tmap.type, tmap.sanitizer, default)
+            ret = MetadataItem(md_type, md_sanitizer, default)
 
         return ret
 
     def _ft_getter(self, key):
         return self.mfile.tags.get(key, None)
 
-    def get(self, norm_key, default=None, _raw_default=False):
+    def get(self, norm_key, default=None, _raw_default=False, typeless=False):
         norm_key = self._normalize_norm_key(norm_key)
         tmap = self.tag_map[norm_key]
+        md_type = None if typeless else tmap.type
+        md_sanitizer = None if typeless else tmap.sanitizer
 
         ret = None
         if hasattr(tmap.getter, '__call__'):
             val = tmap.getter(self, norm_key)
-            ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
+            ret = None if val is None else MetadataItem(md_type, md_sanitizer,
                                                         val)
         elif norm_key.startswith('#'):
-            val = tmap.type(getattr(self.mfile.info, tmap.getter))
-            ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
+            val = getattr(self.mfile.info, tmap.getter)
+            if not typeless:
+                val = tmap.type(val)
+            ret = None if val is None else MetadataItem(md_type, md_sanitizer,
                                                         val)
         elif isinstance(tmap.getter, (list, tuple)):
             val = None
@@ -418,21 +433,21 @@ class AudioFile(object):
                     val = getter(self, norm_key)
                 elif getter in self.mfile.tags:
                     val = self._ft_getter(getter)
-            ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
+            ret = None if val is None else MetadataItem(md_type, md_sanitizer,
                                                         val)
         else:
             try:
                 val = self._ft_getter(tmap.getter)
             except KeyError:
                 val = None
-            ret = None if val is None else MetadataItem(tmap.type, tmap.sanitizer,
+            ret = None if val is None else MetadataItem(md_type, md_sanitizer,
                                                         val)
 
         if ret is None:
             if _raw_default:
                 ret = default
             else:
-                ret = MetadataItem(tmap.type, tmap.sanitizer, default)
+                ret = MetadataItem(md_type, md_sanitizer, default)
 
         return ret
 
@@ -468,11 +483,14 @@ class AudioFile(object):
             if not success:
                 raise
 
-    def set(self, norm_key, val):
+    def set(self, norm_key, val, typeless=False):
         norm_key = self._normalize_norm_key(norm_key)
         tmap = self.tag_map[norm_key]
+        md_type = None if typeless else tmap.type
+        md_sanitizer = None if typeless else tmap.sanitizer
+
         if not isinstance(val, MetadataItem):
-            val = MetadataItem(tmap.type, tmap.sanitizer, val)
+            val = MetadataItem(md_type, md_sanitizer, val)
 
         if hasattr(tmap.setter, '__call__'):
             tmap.setter(self, norm_key, val)

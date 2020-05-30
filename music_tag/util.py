@@ -55,13 +55,13 @@ def get_easy_tracknum(afile, norm_key, _tag_name='tracknumber'):
     if tracknumber in (None, 'None'):
         tracknumber = None
     else:
-        tracknumber = int(tracknumber.split('/')[0])
+        tracknumber = tracknumber.split('/')[0]
     return tracknumber
 
 def set_easy_tracknum(afile, norm_key, val, _tag_name='tracknumber'):
-    tracknumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
+    tracknumber = [i for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     tracknumber += [0] * (2 - len(tracknumber))
-    tracknumber[0] = int(val)
+    tracknumber[0] = val
     afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in tracknumber),
                   appendable=False)
@@ -72,15 +72,15 @@ def get_easy_totaltracks(afile, norm_key, _tag_name='tracknumber'):
         tracknumber = None
     else:
         try:
-            tracknumber = int(tracknumber.split('/')[1])
+            tracknumber = tracknumber.split('/')[1]
         except IndexError:
             tracknumber = None
     return tracknumber
 
 def set_easy_totaltracks(afile, norm_key, val, _tag_name='tracknumber'):
-    tracknumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
+    tracknumber = [i for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     tracknumber += [0] * (2 - len(tracknumber))
-    tracknumber[1] = int(val)
+    tracknumber[1] = val
     afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in tracknumber),
                   appendable=False)
@@ -90,13 +90,13 @@ def get_easy_discnum(afile, norm_key, _tag_name='discnumber'):
     if discnumber in (None, 'None'):
         discnumber = None
     else:
-        discnumber = int(discnumber.split('/')[0])
+        discnumber = discnumber.split('/')[0]
     return discnumber
 
 def set_easy_discnum(afile, norm_key, val, _tag_name='discnumber'):
-    discnumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
+    discnumber = [i for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     discnumber += [0] * (2 - len(discnumber))
-    discnumber[0] = int(val)
+    discnumber[0] = val
     afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in discnumber),
                   appendable=False)
@@ -107,15 +107,15 @@ def get_easy_totaldiscs(afile, norm_key, _tag_name='discnumber'):
         discnumber = None
     else:
         try:
-            discnumber = int(discnumber.split('/')[1])
+            discnumber = discnumber.split('/')[1]
         except IndexError:
             discnumber = None
     return discnumber
 
 def set_easy_totaldiscs(afile, norm_key, val, _tag_name='discnumber'):
-    discnumber = [int(i) for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
+    discnumber = [i for i in str(afile.mfile.get(_tag_name, '0/0')).split('/')]
     discnumber += [0] * (2 - len(discnumber))
-    discnumber[1] = int(val)
+    discnumber[1] = val
     afile.set_raw(norm_key, _tag_name,
                   '/'.join(str(i) for i in discnumber),
                   appendable=False)
