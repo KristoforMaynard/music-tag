@@ -492,7 +492,7 @@ class AudioFile(object):
             if not value_set:
                 self.set_raw(norm_key, tmap.setter[0], val)
         else:
-             self.set_raw(norm_key, tmap.setter, val)
+            self.set_raw(norm_key, tmap.setter, val)
 
     def append_tag(self, norm_key, val):
         norm_key = self._normalize_norm_key(norm_key)
