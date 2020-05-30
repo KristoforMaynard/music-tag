@@ -126,3 +126,16 @@ art.first.raw_thumbnail([64, 64])  # -> b'... raw thumbnail data ...'
 # finally, you can bounce the edits to disk
 f.save()
 ```
+
+### Disable Type Normalization
+
+By default, tags are validated and normalized. For instance, track numbers
+and years are return as integers. Some tag formats store everything as strings
+to enable things like leading zeros in tracknumbers (i.e., track '01'). I think
+this is ugly, but you can use the file object's ``raw`` property if you like
+this kind of thing.
+
+``` python
+f.raw['tracknumber'] = '01'
+f.raw['tracknumber'].value  # -> '01'
+```
