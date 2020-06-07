@@ -3,6 +3,7 @@
 from collections import namedtuple
 import hashlib
 import io
+import shutil
 
 import mutagen
 from mutagen.id3 import PictureType
@@ -366,9 +367,14 @@ class AudioFile(object):
     def raw(self):
         return RawProxy(self)
 
-    def save(self):
+    def save(self, filename=None, **kwargs):
         """BE CAREFUL, I doubt I did a good job testing tag editing"""
-        self.mfile.save()
+        if filename is None:
+            self.mfile.save(**kwargs)
+            filename = self.filename
+        else:
+            shutil.copyfile(self.filename, filename)
+            self.mfile.save(filename, **kwargs)
 
     def _normalize_norm_key(self, norm_key):
         norm_key = norm_key.replace(' ', '').replace('_', '').replace('-', '').lower()
