@@ -75,6 +75,17 @@ def set_pictures(afile, norm_key, artworks):
 
 # https://github.com/tilo/ID3/tree/master/docs
 
+_TAG_MAP_ID3_1 = {
+    'tracktitle': TAG_MAP_ENTRY(getter='title', setter='title', type=str),
+    'artist': TAG_MAP_ENTRY(getter='artist', setter='artist', type=str),
+    'album': TAG_MAP_ENTRY(getter='album', setter='album', type=str),
+    'year': TAG_MAP_ENTRY(getter='year', setter='year', type=int,
+                          sanitizer=util.sanitize_year),
+    'comment': TAG_MAP_ENTRY(getter='comment', setter='comment', type=str),
+    'tracknumber': TAG_MAP_ENTRY(getter='track', setter='track', type=int),
+    'genre': TAG_MAP_ENTRY(getter='genre', setter='genre', type=str),
+}
+
 _TAG_MAP_ID3_2_2 = {
     'tracktitle': TAG_MAP_ENTRY(getter='TT2', setter='TT2', type=str),
     'artist': TAG_MAP_ENTRY(getter='TP1', setter='TP1', type=str),
@@ -125,8 +136,8 @@ _TAG_MAP_ID3_2_3 = {
                                 setter=set_totaldiscsB,
                                 type=int),
     'genre': TAG_MAP_ENTRY(getter='TCON', setter='TCON', type=str),
-    'year': TAG_MAP_ENTRY(getter=('ASDF', 'TORY', 'TYER', 'TDAT', 'TDRC'),
-                          setter=('ASDF', 'TORY', 'TYER', 'TDAT', 'TDRC'),
+    'year': TAG_MAP_ENTRY(getter=('TORY', 'TYER', 'TDAT', 'TDRC'),
+                          setter=('TORY', 'TYER', 'TDAT', 'TDRC'),
                           type=int, sanitizer=util.sanitize_year),
     'comment': TAG_MAP_ENTRY(getter='COMM', setter='COMM', type=str),
     'lyrics': TAG_MAP_ENTRY(getter='USLT', setter='USLT', type=str),
@@ -186,10 +197,13 @@ class Id3File(AudioFile):
             kwargs['_mfile'] = mfile
 
         id3_ver = mfile.tags.version[:2]
-        if id3_ver == (2, 2):
-            self._TAG_MAP = _TAG_MAP_ID3_2_2
+        # by default, mutagen presents all files using id3v2.4
+        if id3_ver[0] == 1:
+            self._TAG_MAP = _TAG_MAP_ID3_2_4
+        elif id3_ver == (2, 2):
+            self._TAG_MAP = _TAG_MAP_ID3_2_4
         elif id3_ver == (2, 3):
-            self._TAG_MAP = _TAG_MAP_ID3_2_3
+            self._TAG_MAP = _TAG_MAP_ID3_2_4
         elif id3_ver == (2, 4):
             self._TAG_MAP = _TAG_MAP_ID3_2_4
         else:
