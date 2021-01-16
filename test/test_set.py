@@ -24,6 +24,7 @@ new_tags = {
     'year': '2020',
     'compilation': False,
     # 'lyrics': "And malt does more than Milton can.To justify God's ways to man.",
+    'isrc': 'US-AAA-01-12345',
     'comment': 'test comment',
     'artwork': new_artwork,
 }

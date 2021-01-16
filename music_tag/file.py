@@ -305,6 +305,7 @@ class AudioFile(object):
         'year': TAG_MAP_ENTRY(type=int, sanitizer=util.sanitize_year),
         'compilation': TAG_MAP_ENTRY(type=bool),
         'lyrics': TAG_MAP_ENTRY(type=str),
+        'isrc': TAG_MAP_ENTRY(type=str),
         'comment': TAG_MAP_ENTRY(type=str),
 
         'artwork': TAG_MAP_ENTRY(type=Artwork),

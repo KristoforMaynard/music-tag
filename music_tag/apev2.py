@@ -95,6 +95,7 @@ class Apev2File(AudioFile):
                               sanitizer=util.sanitize_year),
         'comment': TAG_MAP_ENTRY(getter='Comment', setter='Comment', type=str),
         'lyrics': TAG_MAP_ENTRY(getter='Lyrics', setter='Lyrics', type=str),
+        'isrc': TAG_MAP_ENTRY(getter='ISRC', setter='ISRC', type=str),
         'compilation': TAG_MAP_ENTRY(getter='Compilation', setter='Compilation',
                                      type=int, sanitizer=util.sanitize_bool),
 

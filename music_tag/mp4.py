@@ -5,12 +5,16 @@
 
 import mutagen.mp4
 import mutagen.easymp4
+from mutagen.mp4 import MP4FreeForm
 
 from music_tag import util
 from music_tag.file import Artwork, AudioFile, MetadataItem, TAG_MAP_ENTRY
 
 
 mutagen.easymp4.EasyMP4Tags.RegisterTextKey("compilation", "cpil")
+
+
+_MP4_ISRC_KEY = '----:com.apple.iTunes:ISRC'
 
 
 def get_tracknum(afile, norm_key):
@@ -97,6 +101,13 @@ def set_artwork(afile, norm_key, artworks):
         pics.append(mutagen.mp4.MP4Cover(art.raw, imageformat=img_fmt))
     afile.mfile.tags['covr'] = pics
 
+def freeform_get(afile, norm_key):
+    return [val.decode() for val in afile.mfile.get(norm_key, [])]
+    
+def freeform_set(afile, norm_key, val):
+    ff_vals = [MP4FreeForm(v.encode('utf-8')) for v in val.values]
+    afile.mfile.tags[norm_key] = ff_vals
+    
 
 class Mp4File(AudioFile):
     tag_format = "mp4"
@@ -124,6 +135,10 @@ class Mp4File(AudioFile):
         'year': TAG_MAP_ENTRY(getter='©day', setter='©day', type=int,
                               sanitizer=util.sanitize_year),
         'lyrics': TAG_MAP_ENTRY(getter='©lyr', setter='©lyr', type=str),
+        'isrc': TAG_MAP_ENTRY(getter=lambda f, k: freeform_get(f, _MP4_ISRC_KEY),
+                              setter=lambda f, k, v: freeform_set(f, _MP4_ISRC_KEY, v),
+                              remover=_MP4_ISRC_KEY,
+                              type=str),
         'comment': TAG_MAP_ENTRY(getter='©cmt', setter='©cmt', type=str),
         'compilation': TAG_MAP_ENTRY(getter='cpil', setter='cpil', type=bool,
                                      sanitizer=util.sanitize_bool),

@@ -60,6 +60,7 @@ class FlacFile(AudioFile):
                               setter=('date', 'originaldate'),
                               type=int, sanitizer=util.sanitize_year),
         'lyrics': TAG_MAP_ENTRY(getter='lyrics', setter='lyrics', type=str),
+        'isrc': TAG_MAP_ENTRY(getter='isrc', setter='isrc', type=str),
         'comment': TAG_MAP_ENTRY(getter='comment', setter='comment', type=str),
         'compilation': TAG_MAP_ENTRY(getter='compilation', setter='compilation',
                                      type=int, sanitizer=util.sanitize_bool),

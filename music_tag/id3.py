@@ -108,6 +108,7 @@ _TAG_MAP_ID3_2_2 = {
     'year': TAG_MAP_ENTRY(getter=('TYE', 'TDA', 'TRD', 'TOR'),
                           setter=('TYE', 'TDA', 'TRD', 'TOR'),
                           type=int, sanitizer=util.sanitize_year),
+    'isrc': TAG_MAP_ENTRY(getter='TRC', setter='TRC', type=str),
     # 'comment': TAG_MAP_ENTRY(getter='COMM', setter='COMM', type=str,
     #                          sanitizer=util.sanitize_bool),
     # 'lyrics': TAG_MAP_ENTRY(getter='USLT', setter='USLT', type=str),
@@ -141,6 +142,7 @@ _TAG_MAP_ID3_2_3 = {
                           type=int, sanitizer=util.sanitize_year),
     'comment': TAG_MAP_ENTRY(getter='COMM', setter='COMM', type=str),
     'lyrics': TAG_MAP_ENTRY(getter='USLT', setter='USLT', type=str),
+    'isrc': TAG_MAP_ENTRY(getter='TSRC', setter='TSRC', type=str),
     'compilation': TAG_MAP_ENTRY(getter='TCMP', setter='TCMP', type=int,
                                  sanitizer=util.sanitize_bool),
 
@@ -177,6 +179,7 @@ _TAG_MAP_ID3_2_4 = {
                           type=int, sanitizer=util.sanitize_year),
     'comment': TAG_MAP_ENTRY(getter='COMM', setter='COMM', type=str),
     'lyrics': TAG_MAP_ENTRY(getter='USLT', setter='USLT', type=str),
+    'isrc': TAG_MAP_ENTRY(getter='TSRC', setter='TSRC', type=str),
     'compilation': TAG_MAP_ENTRY(getter='TCMP', setter='TCMP', type=int,
                                  sanitizer=util.sanitize_bool),
 

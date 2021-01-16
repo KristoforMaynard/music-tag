@@ -37,6 +37,7 @@ sample_tags = {
     'year': 2019,
     'compilation': True,
     # 'lyrics': "And malt does more than Milton can.To justify God's ways to man.",
+    'isrc': 'uszzz0112345',
     'comment': 'sin(2 * pi * 440 * t)',
     'artwork': sample_artwork,
 }
