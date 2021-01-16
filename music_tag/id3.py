@@ -196,7 +196,11 @@ class Id3File(AudioFile):
             mfile = mutagen.File(filename)
             kwargs['_mfile'] = mfile
 
-        id3_ver = mfile.tags.version[:2]
+        if mfile.tags:
+            id3_ver = mfile.tags.version[:2]
+        else:
+            id3_ver = (2, 4)
+
         # by default, mutagen presents all files using id3v2.4
         if id3_ver[0] == 1:
             self._TAG_MAP = _TAG_MAP_ID3_2_4

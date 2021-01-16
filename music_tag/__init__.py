@@ -20,6 +20,7 @@ from music_tag import id3
 from music_tag import mp4
 from music_tag import smf
 from music_tag import vorbis
+from music_tag import wave
 
 from music_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
 
@@ -46,12 +47,12 @@ def load_file(file_spec, err='raise'):
         filename = mfile.filename
     else:
         filename = file_spec
-    if not os.path.exists(filename):
-        if os.path.exists(os.path.expanduser(os.path.expandvars(filename))):
-            filename = os.path.expanduser(os.path.expandvars(filename))
-        elif os.path.exists(os.path.expanduser(filename)):
-            filename = os.path.expanduser(filename)
-    mfile = mutagen.File(filename, easy=False)
+        if not os.path.exists(filename):
+            if os.path.exists(os.path.expanduser(os.path.expandvars(filename))):
+                filename = os.path.expanduser(os.path.expandvars(filename))
+            elif os.path.exists(os.path.expanduser(filename)):
+                filename = os.path.expanduser(filename)
+        mfile = mutagen.File(filename, easy=False)
 
     ret = None
 
@@ -69,7 +70,7 @@ def load_file(file_spec, err='raise'):
 
 __all__ = ['file', 'util',
            'aac', 'aiff', 'apev2', 'asf', 'dsf', 'flac',
-           'id3', 'mp4', 'smf', 'vorbis',
+           'id3', 'mp4', 'smf', 'vorbis', 'wave',
            'logger', 'log',
            'Artwork', 'MetadataItem', 'NotAppendable',
            'AudioFile',

@@ -17,6 +17,7 @@ files = [
     load_file(os.path.join(sample_dir, '440Hz.mp3')),
     load_file(os.path.join(sample_dir, '440Hz.ogg')),
     load_file(os.path.join(sample_dir, '440Hz.opus')),
+    load_file(os.path.join(sample_dir, '440Hz_id3.wav')),
     load_file(os.path.join(sample_dir, '440Hz.wv')),
 ]
 

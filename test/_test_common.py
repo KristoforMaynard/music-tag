@@ -17,6 +17,7 @@ sample_files = [
     os.path.join(sample_dir, '440Hz.ogg'),
     os.path.join(sample_dir, '440Hz.opus'),
     os.path.join(sample_dir, '440Hz.wv'),
+    os.path.join(sample_dir, '440Hz_id3.wav'),
 ]
 
 with open(os.path.join(sample_dir, 'cover.jpg'), 'rb') as fin:
