@@ -40,14 +40,19 @@ def _subclass_spider_dfs(kls, _lst=None):
     return _lst
 
 
-def load_file(filename, err='raise'):
+def load_file(file_spec, err='raise'):
+    if isinstance(file_spec, mutagen.FileType):
+        mfile = file_spec
+        filename = mfile.filename
+    else:
+        filename = file_spec
     if not os.path.exists(filename):
         if os.path.exists(os.path.expanduser(os.path.expandvars(filename))):
             filename = os.path.expanduser(os.path.expandvars(filename))
         elif os.path.exists(os.path.expanduser(filename)):
             filename = os.path.expanduser(filename)
-
     mfile = mutagen.File(filename, easy=False)
+
     ret = None
 
     for kls in _subclass_spider_dfs(file.AudioFile):
