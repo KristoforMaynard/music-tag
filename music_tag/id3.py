@@ -232,7 +232,15 @@ class Id3File(AudioFile):
     def _ft_setter(self, key, md_val, appendable=True):
         self.mfile.tags.delall(key)
         kls = getattr(mutagen.id3, key.split(':')[0])
-        self.mfile.tags.add(kls(text=str(md_val)))
+        
+        kwargs = {}
+        _o = kls()
+        if hasattr(_o, 'lang'):
+            # so, it's a little anglo-centric to do this, but
+            # this matches the behavior of kid3 and MusicBrainz Picard
+            kwargs['lang'] = 'eng'
+        
+        self.mfile.tags.add(kls(text=str(md_val), **kwargs))
 
     def _ft_rmtag(self, key):
         self.mfile.tags.delall(key)
