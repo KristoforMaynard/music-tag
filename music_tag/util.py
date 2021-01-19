@@ -15,10 +15,13 @@ def as_str(value):
     return str(value)
 
 def sanitize_year(year):
-    if ',' in year:
-        year = year.split(',')[0]
-        # TODO: warn that we're dropping a 2nd year
-
+    try:
+        if ',' in year:
+            year = year.split(',')[0]
+            # TODO: warn that we're dropping a 2nd year
+    except TypeError:
+        pass
+    
     try:
         year = int(year)
     except ValueError:
