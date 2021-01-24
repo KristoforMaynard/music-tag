@@ -25,7 +25,7 @@ from music_tag import wave
 from music_tag.file import Artwork, MetadataItem, NotAppendable, AudioFile
 
 
-__version__ = """0.3.2"""
+__version__ = """0.4.0"""
 
 
 logger = logging.getLogger("music_tag")
