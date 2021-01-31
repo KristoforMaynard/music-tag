@@ -227,6 +227,8 @@ class Id3File(AudioFile):
                 ret += [str(t) for t in val.text]
             else:
                 ret += [str(val.text)]
+        if not ret:
+            ret = None
         return ret
 
     def _ft_setter(self, key, md_val, appendable=True):

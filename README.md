@@ -139,3 +139,28 @@ this kind of thing.
 f.raw['tracknumber'] = '01'
 f.raw['tracknumber'].value  # -> '01'
 ```
+
+## Resolvers
+
+Some tags may not exist in a file, but there could be enough information to
+discern the correct value. For instance, the ``album artist`` tag is probably
+equal to the ``artist`` tag, or ``"Various Artists"`` if the ``compilation``
+flag is set. Here are some examples,
+
+``` python
+f['album artist'] = 'Brian'
+f.resolve('album artist')  # <- 'Brian'
+f['artist'] = 'Brian'
+del f['album artist']
+f['compilation'] = False
+f.resolve('album artist')  # <- 'Brian'
+f['compilation'] = True
+f.resolve('album artist')  # <- 'Various Artists'
+
+del f['compilation']
+f['album artist'] = 'Various Artists'
+f.resolve('compilation')  # <- True
+f['album artist'] = 'Brian'
+f.resolve('compilation')  # <- False
+```
+
