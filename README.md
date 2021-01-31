@@ -164,3 +164,34 @@ f['album artist'] = 'Brian'
 f.resolve('compilation')  # <- False
 ```
 
+## Command Line Tool
+
+The music_tag package can be used as a CLI to get / set tags. Here are some
+examples,
+
+### Printing Tags
+
+``` bash
+# Print tags from all audio files in sample directory
+python -m music_tag --print ./sample
+
+# Print specific tags from all audio files in sample directory      
+python -m music_tag --print --tags="Title : Album" ./sample
+
+# Write tags from all audio files in sample directory to a csv file
+python -m music_tag --to-csv tags.csv ./sample
+
+# Write specific tags from all audio files in sample directory to a csv file
+python -m music_tag --tags="Title : Album" --to-csv tags.csv ./sample
+```
+
+### Setting Tags
+``` bash
+# Set a couple tags for multiple files      
+python -m music_tag --set "genre:Pop" --set "comment:cli test" \
+    ./sample/440Hz.aac ./sample/440Hz.flac
+
+# Write tags from csv file to audio files (assuming file paths in
+# the csv file are relative to the sample directory
+python -m music_tag --from-csv tags.csv
+```

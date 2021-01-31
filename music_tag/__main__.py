@@ -10,13 +10,13 @@ Examples
         $ python -m music_tag --print ./sample
 
         $ # Print specific tags from all audio files in sample directory      
-        $ python -m music_tag --print --tags="Track Title : Album" ./sample
+        $ python -m music_tag --print --tags="Title : Album" ./sample
 
         $ # Write tags from all audio files in sample directory to a csv file
         $ python -m music_tag --to-csv tags.csv ./sample
 
         $ # Write specific tags from all audio files in sample directory to a csv file
-        $ python -m music_tag --tags="Track Title : Album" --to-csv tags.csv ./sample
+        $ python -m music_tag --tags="Title : Album" --to-csv tags.csv ./sample
 
     Setting tags:
 
@@ -45,7 +45,7 @@ _audio_pattern = ['*.wav', '*.aac', '*.aiff', '*.dsf', '*.flac',
                   '*.m4a', '*.mp3', '*.ogg', '*.opus', '*.wv']
 
 _default_tags = ('Disc Number : Total Discs : Track Number : Total Tracks '
-                 ': Track Title : Artist : Album : Album Artist '
+                 ': Title : Artist : Album : Album Artist '
                  ': Year : Genre : Comment')
 
 
@@ -61,10 +61,6 @@ def _expand_files(files):
         else:
             ret.append(f)
     return ret
-
-def _print_tags(mt_file, keys):
-    for k in keys:
-        print(k, ': ', str(mt_file[k]), sep='')
 
 
 def _main():
@@ -89,6 +85,8 @@ def _main():
                         help='ignore missing audio files when using from-csv')
     parser.add_argument('-D', '--csv-dialect', action='store', default='excel',
                         help='csv file dialect (excel | excel_tab | unix)')
+    parser.add_argument('--resolve', action='store_true',
+                        help='Use resolve to discern missing tags')
     parser.add_argument('files', nargs='*')
 
     args = parser.parse_args()
@@ -101,7 +99,7 @@ def _main():
 
         for fname in fnames:
             f = music_tag.load_file(fname)
-            _print_tags(f, tags)
+            print(f.info(tags=tags, show_empty=True, resolve=args.resolve))
             print()
     
     if args.set:
@@ -130,7 +128,10 @@ def _main():
             csvwriter.writerow(tags + ['filename'])
             for fname in fnames:
                 mt_f = music_tag.load_file(fname)
-                row = [mt_f[k] for k in tags] + [fname]
+                if args.resolve:
+                    row = [mt_f.resolve(k) for k in tags] + [fname]
+                else:
+                    row = [mt_f[k] for k in tags] + [fname]
                 csvwriter.writerow(row)
 
     if args.from_csv:

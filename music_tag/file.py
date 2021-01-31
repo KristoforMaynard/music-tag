@@ -579,6 +579,23 @@ class AudioFile(object):
             elif isinstance(remover, util.string_types):
                 self._ft_rmtag(remover)
 
+    def info(self, tags=None, show_empty=False, resolve=False):
+        if not tags:
+            tags = self._TAG_MAP.keys()
+        
+        t_lst = []
+        for tag in tags:
+            if resolve:
+                mdi = self.resolve(tag, None)
+            else:
+                mdi = self.get(tag, None)
+
+            if mdi or show_empty:
+                t_lst.append('{0}: {1}'.format(tag, str(mdi)))
+
+        return '\n'.join(t_lst)
+
+
     def __getitem__(self, norm_key):
         return self.get(norm_key, default=None)
 
@@ -590,6 +607,9 @@ class AudioFile(object):
 
     def __delitem__(self, norm_key):
         self.remove_tag(norm_key)
+
+    def __str__(self):
+        return self.info(show_empty=True)
 
 ##
 ## EOF
