@@ -43,6 +43,13 @@ characters. In other words, ``Album Artist``, ``album-artist``, and
 - ``tracknumber``
 - ``tracktitle``
 - ``year``
+- ``isrc``
+- ``#bitrate`` (read only)
+- ``#codec`` (read only)
+- ``#length`` (read only)
+- ``#channels`` (read only)
+- ``#bitspersample`` (read only)
+- ``#samplerate`` (read only)
 
 ## Examples
 
