@@ -9,7 +9,7 @@ python -m  pip install ./dist/music_tag*.whl
 echo "(Done)"
 
 # test
-sh ./test/run_tests.sh
+./test/run_tests.sh
 
 # cleaning
 echo "Cleaning..."
