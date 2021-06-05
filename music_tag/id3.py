@@ -71,7 +71,7 @@ def set_pictures(afile, norm_key, artworks):
     tag = str(kls.__name__).strip(':')
     afile.mfile.tags.delall(tag)
     for i, art in enumerate(artworks.values):
-        afile.mfile.tags.add(kls(data=art.raw, type=art.pic_type, desc=str(i)))
+        afile.mfile.tags.add(kls(data=art.raw, type=art.pic_type, desc=str(i), mime=art.mime))
 
 # https://github.com/tilo/ID3/tree/master/docs
 
