@@ -5,7 +5,7 @@ echo "Building...."
 echo "(Done)"
 
 echo "Installing..."
-python -m  pip install ./dist/music-tag-*.whl
+python -m  pip install ./dist/music_tag*.whl
 echo "(Done)"
 
 # test
