@@ -71,7 +71,16 @@ def set_pictures(afile, norm_key, artworks):
     tag = str(kls.__name__).strip(':')
     afile.mfile.tags.delall(tag)
     for i, art in enumerate(artworks.values):
-        afile.mfile.tags.add(kls(data=art.raw, type=art.pic_type, desc=str(i)))
+        if kls == mutagen.id3.PIC:
+            mime = {
+                'image/jpeg': 'JPG',
+                'image/jpg': 'JPG',
+                'image/png': 'PNG'
+            }[art.mime.lower()]
+        else:
+            mime = art.mime
+        afile.mfile.tags.add(kls(data=art.raw, type=art.pic_type, desc=str(i),
+                                 mime=mime))
 
 # https://github.com/tilo/ID3/tree/master/docs
 
