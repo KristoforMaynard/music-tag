@@ -6,6 +6,7 @@ echo "(Done)"
 
 echo "Installing..."
 python -m  pip install ./dist/music_tag*.whl
+python -m  pip install pillow
 echo "(Done)"
 
 # test
