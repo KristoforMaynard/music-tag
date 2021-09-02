@@ -127,12 +127,15 @@ def _main():
                                    quoting=csv.QUOTE_MINIMAL)
             csvwriter.writerow(tags + ['filename'])
             for fname in fnames:
-                mt_f = music_tag.load_file(fname)
-                if args.resolve:
-                    row = [mt_f.resolve(k) for k in tags] + [fname]
-                else:
-                    row = [mt_f.raw[k] for k in tags] + [fname]
-                csvwriter.writerow(row)
+                try:
+                    mt_f = music_tag.load_file(fname)
+                    if args.resolve:
+                        row = [mt_f.resolve(k) for k in tags] + [fname]
+                    else:
+                        row = [mt_f.raw[k] for k in tags] + [fname]
+                    csvwriter.writerow(row)
+                except Exception as err:
+                    print("Error with %s (%s)".format(fname, err))
 
     if args.from_csv:
         pth0 = ''
