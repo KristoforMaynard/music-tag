@@ -135,7 +135,7 @@ def _main():
                         row = [mt_f.raw[k] for k in tags] + [fname]
                     csvwriter.writerow(row)
                 except Exception as err:
-                    print("Error with %s (%s)".format(fname, err))
+                    print("Error with {} ({})".format(fname, err))
 
     if args.from_csv:
         pth0 = ''
