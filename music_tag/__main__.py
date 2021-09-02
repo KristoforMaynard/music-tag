@@ -131,7 +131,7 @@ def _main():
                 if args.resolve:
                     row = [mt_f.resolve(k) for k in tags] + [fname]
                 else:
-                    row = [mt_f[k] for k in tags] + [fname]
+                    row = [mt_f.raw[k] for k in tags] + [fname]
                 csvwriter.writerow(row)
 
     if args.from_csv:
