@@ -106,6 +106,16 @@ def _main():
         set_key_vals = [s.split(':') for s in args.set]
         set_key_vals = [(kv[0], ':'.join(kv[1:])) for kv in set_key_vals]
         
+        for ii, kv in enumerate(set_key_vals):
+            if kv[1].startswith('file://'):
+                with open(kv[1][len('file://'):], 'r') as fin:
+                    print(fin.name)
+                    set_key_vals[ii] = (kv[0], fin.read())
+            elif kv[1].startswith('bin://'):
+                with open(kv[1][len('bin://'):], 'rb') as fin:
+                    print(fin.name)
+                    set_key_vals[ii] = (kv[0], fin.read())
+        
         fnames = _expand_files(args.files)
         for fname in fnames:
             mt_f = music_tag.load_file(fname)
