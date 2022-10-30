@@ -24,10 +24,13 @@ def get_pictures(afile, norm_key):
         image_data = base64.b64decode(dat.encode("ascii"))
         artworks = Artwork(image_data)
 
-    for p in afile.mfile.tags['metadata_block_picture']:
-        pb = util.parse_picture_block(base64.standard_b64decode(p))
-        art = Artwork(pb.data, width=pb.width, height=pb.height, fmt=pb.format)
-        artworks.append(art)
+    try:
+        for p in afile.mfile.tags['metadata_block_picture']:
+            pb = util.parse_picture_block(base64.standard_b64decode(p))
+            art = Artwork(pb.data, width=pb.width, height=pb.height, fmt=pb.format)
+            artworks.append(art)
+    except KeyError:
+        pass
 
     return MetadataItem(Artwork, None, artworks)
 

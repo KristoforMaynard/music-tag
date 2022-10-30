@@ -123,6 +123,43 @@ def set_easy_totaldiscs(afile, norm_key, val, _tag_name='discnumber'):
                   '/'.join(str(i) for i in discnumber),
                   appendable=False)
 
+def rm_easy_tracknum(afile, norm_key, _tag_name='tracknumber'):
+    if not get_easy_totaltracks(afile, None, _tag_name=_tag_name):
+        try:
+            del afile.mfile.tags['trkn']
+        except KeyError:
+            pass
+    else:
+        set_easy_tracknum(afile, None, 0, _tag_name=_tag_name)
+
+def rm_easy_totaltracks(afile, norm_key, _tag_name='tracknumber'):
+    if not get_easy_tracknum(afile, None, _tag_name=_tag_name):
+        try:
+            del afile.mfile.tags['trkn']
+        except KeyError:
+            pass
+    else:
+        set_easy_totaltracks(afile, None, 0, _tag_name=_tag_name)
+
+def rm_easy_discnum(afile, norm_key, _tag_name='discnumber'):
+    if not get_easy_totaldiscs(afile, None, _tag_name=_tag_name):
+        try:
+            del afile.mfile.tags['disk']
+        except KeyError:
+            pass
+    else:
+        set_easy_discnum(afile, None, 0, _tag_name=_tag_name)
+
+def rm_easy_totaldiscs(afile, norm_key, _tag_name='discnumber'):
+    if not get_easy_discnum(afile, None, _tag_name=_tag_name):
+        try:
+            del afile.mfile.tags['disk']
+        except KeyError:
+            pass
+    else:
+        set_easy_totaldiscs(afile, None, 0, _tag_name=_tag_name)
+
+
 PicBlock = namedtuple('PicBlock', ('typeid', 'picturetype', 'mime', 'format',
                                    'descr', 'width', 'height', 'color_depth',
                                    'colors_indexed', 'data'))

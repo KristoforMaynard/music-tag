@@ -77,7 +77,10 @@ def get_artwork(afile, norm_key):
     fmt_lut = {mutagen.mp4.MP4Cover.FORMAT_JPEG: 'jpeg',
                mutagen.mp4.MP4Cover.FORMAT_PNG: 'png',
               }
-    artworks = [Artwork(bytes(p)) for p in afile.mfile.tags['covr']]
+    if 'covr' in afile.mfile.tags:
+        artworks = [Artwork(bytes(p)) for p in afile.mfile.tags['covr']]
+    else:
+        artworks = []
 
     return MetadataItem(Artwork, None, artworks)
 
@@ -107,7 +110,43 @@ def freeform_get(afile, norm_key):
 def freeform_set(afile, norm_key, val):
     ff_vals = [MP4FreeForm(v.encode('utf-8')) for v in val.values]
     afile.mfile.tags[norm_key] = ff_vals
-    
+
+def rm_tracknum(afile, norm_key):
+    if not get_totaltracks(afile, None):
+        try:
+            del afile.mfile.tags['trkn']
+        except KeyError:
+            pass
+    else:
+        set_tracknum(afile, None, 0)
+
+def rm_totaltracks(afile, norm_key):
+    if not get_tracknum(afile, None):
+        try:
+            del afile.mfile.tags['trkn']
+        except KeyError:
+            pass
+    else:
+        set_totaltracks(afile, None, 0)
+
+def rm_discnum(afile, norm_key):
+    if not get_totaldiscs(afile, None):
+        try:
+            del afile.mfile.tags['disk']
+        except KeyError:
+            pass
+    else:
+        set_discnum(afile, None, 0)
+
+def rm_totaldiscs(afile, norm_key):
+    if not get_discnum(afile, None):
+        try:
+            del afile.mfile.tags['disk']
+        except KeyError:
+            pass
+    else:
+        set_totaldiscs(afile, None, 0)
+
 
 class Mp4File(AudioFile):
     tag_format = "mp4"
@@ -121,15 +160,19 @@ class Mp4File(AudioFile):
         'composer': TAG_MAP_ENTRY(getter='©wrt', setter='©wrt', type=str),
         'tracknumber': TAG_MAP_ENTRY(getter=get_tracknum,
                                      setter=set_tracknum,
+                                     remover=rm_tracknum,
                                      type=int),
         'totaltracks': TAG_MAP_ENTRY(getter=get_totaltracks,
                                      setter=set_totaltracks,
+                                     remover=rm_totaltracks,
                                      type=int),
         'discnumber': TAG_MAP_ENTRY(getter=get_discnum,
                                     setter=set_discnum,
+                                    remover=rm_discnum,
                                     type=int),
         'totaldiscs': TAG_MAP_ENTRY(getter=get_totaldiscs,
                                     setter=set_totaldiscs,
+                                    remover=rm_totaldiscs,
                                     type=int),
         'genre': TAG_MAP_ENTRY(getter='©gen', setter='©gen', type=str),
         'year': TAG_MAP_ENTRY(getter='©day', setter='©day', type=int,
@@ -144,6 +187,7 @@ class Mp4File(AudioFile):
                                      sanitizer=util.sanitize_bool),
 
         'artwork': TAG_MAP_ENTRY(getter=get_artwork, setter=set_artwork,
+                                 remover='covr',
                                  type=Artwork),
     }
 
@@ -160,15 +204,19 @@ class EasyMp4File(Mp4File):
         'albumartist': TAG_MAP_ENTRY(getter='albumartist', setter='albumartist', type=str),
         'tracknumber': TAG_MAP_ENTRY(getter=util.get_easy_tracknum,
                                      setter=util.set_easy_tracknum,
+                                     remover=util.rm_easy_tracknum,
                                      type=int),
         'totaltracks': TAG_MAP_ENTRY(getter=util.get_easy_totaltracks,
                                      setter=util.set_easy_totaltracks,
+                                     remover=util.rm_easy_totaltracks,
                                      type=int),
         'discnumber': TAG_MAP_ENTRY(getter=util.get_easy_discnum,
                                     setter=util.set_easy_discnum,
+                                    remover=util.rm_easy_discnum,
                                     type=int),
         'totaldiscs': TAG_MAP_ENTRY(getter=util.get_easy_totaldiscs,
                                     setter=util.set_easy_totaldiscs,
+                                    remover=util.rm_easy_totaldiscs,
                                     type=int),
         'genre': TAG_MAP_ENTRY(getter='genre', setter='genre', type=str),
         'year': TAG_MAP_ENTRY(getter='date', setter='date', type=int,

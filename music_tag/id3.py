@@ -18,37 +18,53 @@ def get_tracknumA(afile, norm_key):
     return util.get_easy_tracknum(afile, norm_key, _tag_name='TRK')
 def set_tracknumA(afile, norm_key, val):
     return util.set_easy_tracknum(afile, norm_key, val, _tag_name='TRK')
+def rm_tracknumA(afile, norm_key):
+    return util.rm_easy_tracknum(afile, norm_key, _tag_name='TRK')
 def get_totaltracksA(afile, norm_key):
     return util.get_easy_totaltracks(afile, norm_key, _tag_name='TRK')
 def set_totaltracksA(afile, norm_key, val):
     return util.set_easy_totaltracks(afile, norm_key, val, _tag_name='TRK')
+def rm_totaltracksA(afile, norm_key):
+    return util.rm_easy_totaltracks(afile, norm_key, _tag_name='TRK')
 
 def get_discnumA(afile, norm_key):
     return util.get_easy_discnum(afile, norm_key, _tag_name='TPA')
 def set_discnumA(afile, norm_key, val):
     return util.set_easy_discnum(afile, norm_key, val, _tag_name='TPA')
+def rm_discnumA(afile, norm_key):
+    return util.rm_easy_discnum(afile, norm_key, _tag_name='TPA')
 def get_totaldiscsA(afile, norm_key):
     return util.get_easy_totaldiscs(afile, norm_key, _tag_name='TPA')
 def set_totaldiscsA(afile, norm_key, val):
     return util.set_easy_totaldiscs(afile, norm_key, val, _tag_name='TPA')
+def rm_totaldiscsA(afile, norm_key):
+    return util.rm_easy_totaldiscs(afile, norm_key, _tag_name='TPA')
 
 def get_tracknumB(afile, norm_key):
     return util.get_easy_tracknum(afile, norm_key, _tag_name='TRCK')
 def set_tracknumB(afile, norm_key, val):
     return util.set_easy_tracknum(afile, norm_key, val, _tag_name='TRCK')
+def rm_tracknumB(afile, norm_key):
+    return util.rm_easy_tracknum(afile, norm_key, _tag_name='TRCK')
 def get_totaltracksB(afile, norm_key):
     return util.get_easy_totaltracks(afile, norm_key, _tag_name='TRCK')
 def set_totaltracksB(afile, norm_key, val):
     return util.set_easy_totaltracks(afile, norm_key, val, _tag_name='TRCK')
+def rm_totaltracksB(afile, norm_key):
+    return util.rm_easy_totaltracks(afile, norm_key, _tag_name='TRCK')
 
 def get_discnumB(afile, norm_key):
     return util.get_easy_discnum(afile, norm_key, _tag_name='TPOS')
 def set_discnumB(afile, norm_key, val):
     return util.set_easy_discnum(afile, norm_key, val, _tag_name='TPOS')
+def rm_discnumB(afile, norm_key):
+    return util.rm_easy_discnum(afile, norm_key, _tag_name='TPOS')
 def get_totaldiscsB(afile, norm_key):
     return util.get_easy_totaldiscs(afile, norm_key, _tag_name='TPOS')
 def set_totaldiscsB(afile, norm_key, val):
     return util.set_easy_totaldiscs(afile, norm_key, val, _tag_name='TPOS')
+def rm_totaldiscsB(afile, norm_key):
+    return util.rm_easy_totaldiscs(afile, norm_key, _tag_name='TPOS')
 
 def get_pictures(afile, norm_key):
     pics = afile.mfile.tags.getall('APIC') + afile.mfile.tags.getall('PIC')
@@ -82,6 +98,10 @@ def set_pictures(afile, norm_key, artworks):
         afile.mfile.tags.add(kls(data=art.raw, type=art.pic_type, desc=str(i),
                                  mime=mime))
 
+def rm_pictures(afile, norm_key):
+    afile.mfile.tags.delall('APIC')
+    afile.mfile.tags.delall('PIC')
+
 # https://github.com/tilo/ID3/tree/master/docs
 
 _TAG_MAP_ID3_1 = {
@@ -103,15 +123,19 @@ _TAG_MAP_ID3_2_2 = {
     'composer': TAG_MAP_ENTRY(getter='TCM', setter='TCM', type=str),
     'tracknumber': TAG_MAP_ENTRY(getter=get_tracknumA,
                                  setter=set_tracknumA,
+                                 remover=rm_tracknumA,
                                  type=int),
     'totaltracks': TAG_MAP_ENTRY(getter=get_totaltracksA,
                                  setter=set_totaltracksA,
+                                 remover=rm_totaltracksA,
                                  type=int),
     'discnumber': TAG_MAP_ENTRY(getter=get_discnumA,
                                 setter=set_discnumA,
+                                remover=rm_discnumA,
                                 type=int),
     'totaldiscs': TAG_MAP_ENTRY(getter=get_totaldiscsA,
                                 setter=set_totaldiscsA,
+                                remover=rm_totaldiscsA,
                                 type=int),
     'genre': TAG_MAP_ENTRY(getter='TCO', setter='TCO', type=str),
     'year': TAG_MAP_ENTRY(getter=('TYE', 'TDA', 'TRD', 'TOR'),
@@ -124,6 +148,7 @@ _TAG_MAP_ID3_2_2 = {
     # 'compilation': TAG_MAP_ENTRY(getter='TCMP', setter='TCMP', type=int),
 
     'artwork': TAG_MAP_ENTRY(getter=get_pictures, setter=set_pictures,
+                             remover=rm_pictures,
                              type=Artwork),
 }
 
@@ -135,15 +160,19 @@ _TAG_MAP_ID3_2_3 = {
     'composer': TAG_MAP_ENTRY(getter='TCOM', setter='TCOM', type=str),
     'tracknumber': TAG_MAP_ENTRY(getter=get_tracknumB,
                                  setter=set_tracknumB,
+                                 remover=rm_tracknumB,
                                  type=int),
     'totaltracks': TAG_MAP_ENTRY(getter=get_totaltracksB,
                                  setter=set_totaltracksB,
+                                 remover=rm_totaltracksB,
                                  type=int),
     'discnumber': TAG_MAP_ENTRY(getter=get_discnumB,
                                 setter=set_discnumB,
+                                remover=rm_discnumB,
                                 type=int),
     'totaldiscs': TAG_MAP_ENTRY(getter=get_totaldiscsB,
                                 setter=set_totaldiscsB,
+                                remover=rm_totaldiscsB,
                                 type=int),
     'genre': TAG_MAP_ENTRY(getter='TCON', setter='TCON', type=str),
     'year': TAG_MAP_ENTRY(getter=('TORY', 'TYER', 'TDAT', 'TDRC'),
@@ -156,6 +185,7 @@ _TAG_MAP_ID3_2_3 = {
                                  sanitizer=util.sanitize_bool),
 
     'artwork': TAG_MAP_ENTRY(getter=get_pictures, setter=set_pictures,
+                             remover=rm_pictures,
                              type=Artwork),
 }
 
@@ -193,7 +223,7 @@ _TAG_MAP_ID3_2_4 = {
                                  sanitizer=util.sanitize_bool),
 
     'artwork': TAG_MAP_ENTRY(getter=get_pictures, setter=set_pictures,
-                             remover=('APIC', 'PIC'),
+                             remover=rm_pictures,
                              type=Artwork),
 }
 

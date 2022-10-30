@@ -31,9 +31,10 @@ def _main():
         f = music_tag.load_file(temp_fname)
 
         for key, _ in test_common.sample_tags.items():
-            if key not in ('tracknumber', 'totaltracks', 'discnumber',
-                           'totaldiscs', 'artwork'):
-                assert key not in f, 'key {0} exists'.format(key)
+            # if key not in ('tracknumber', 'totaltracks', 'discnumber',
+            #                'totaldiscs', 'artwork'):
+            # if key not in ('artwork', ):
+            assert key not in f, 'key {0} exists'.format(key)
 
         os.remove(temp_fname)
 
