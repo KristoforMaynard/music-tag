@@ -68,10 +68,10 @@ class MetadataItem(object):
 
     @property
     def ismissing(self):
-        return bool(self.values)
+        return not bool(self.values)
     @property
     def isna(self):
-        return bool(self.values)
+        return not bool(self.values)
 
     @property
     def values(self):
@@ -590,7 +590,7 @@ class AudioFile(object):
             else:
                 mdi = self.get(tag, None)
 
-            if mdi or show_empty:
+            if show_empty or not mdi.ismissing:
                 t_lst.append('{0}: {1}'.format(tag, str(mdi)))
 
         return '\n'.join(t_lst)
@@ -610,6 +610,22 @@ class AudioFile(object):
 
     def __str__(self):
         return self.info(show_empty=True)
+
+    def __iter__(self):
+        return (k for k in self._TAG_MAP.keys() if not self[k].ismissing)
+
+    def keys(self):
+        return self.__iter__()
+
+    def items(self):
+        return ((k, self[k]) for k in self)
+
+    def values(self):
+        return (self[k]  for k in self)
+
+    def remove_all(self):
+        for k in list(self.keys()):
+            del self[k]
 
 ##
 ## EOF
