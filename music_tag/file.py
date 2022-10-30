@@ -588,7 +588,7 @@ class AudioFile(object):
             if resolve:
                 mdi = self.resolve(tag, None)
             else:
-                mdi = self.get(tag, None)
+                mdi = self.raw.get(tag, None)
 
             if show_empty or not mdi.ismissing:
                 t_lst.append('{0}: {1}'.format(tag, str(mdi)))
