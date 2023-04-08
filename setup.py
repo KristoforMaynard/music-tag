@@ -71,6 +71,9 @@ def _main():
           url=url,
           download_url=download_url,
           keywords=['music', 'metadata', 'id3'],
+          entry_points={
+              "console_scripts": ["music-tag=music_tag.__main__:_main"]
+          },
           install_requires=['mutagen'],
           extras_require={
               'artwork': 'Pillow',
@@ -79,7 +82,7 @@ def _main():
           cmdclass=cmdclass,
           scripts=scripts,
           zip_safe=True,
-          classifiers=(
+          classifiers=[
               "Programming Language :: Python :: 3",
               "Programming Language :: Python :: 3.3",
               "Programming Language :: Python :: 3.4",
@@ -88,7 +91,7 @@ def _main():
               "Programming Language :: Python :: 3.7",
               "License :: OSI Approved :: MIT License",
               "Operating System :: OS Independent",
-          ),
+          ],
     )
 
     # if installed, store list of installed files in a json file - this
