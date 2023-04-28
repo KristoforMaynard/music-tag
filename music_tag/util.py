@@ -25,10 +25,10 @@ def sanitize_year(year):
     try:
         year = int(year)
     except ValueError:
-        if re.match(r'^[0-9]{4}[-\s][0-9]{2}[-\s][0-9]{2}$', year):
+        if re.match(r'^[0-9]{4}[-/\s][0-9]{2}[-/\s][0-9]{2}(?:[T\s][0-9]{2}:[0-9]{2}:[0-9]{2})?$', year):
             year = int(year[:4])
-        elif re.match(r'^[0-9]{2}[-/\s][0-9]{2}[-/\s][0-9]{4}$', year):
-            year = int(year[-4:])
+        elif re.match(r'^[0-9]{2}[-/\s][0-9]{2}[-/\s][0-9]{4}(?:[T\s][0-9]{2}:[0-9]{2}:[0-9]{2})?$', year):
+            year = int(year[6:10])
         else:
             raise ValueError("Could not extract year from: {0}".format(year))
     return year
